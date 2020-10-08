@@ -4,12 +4,10 @@ const app = express();
 
 const PORT = process.env.PORT || 8080;
 
-const DIST_DIR = path.join(__dirname, "dist");
-
-app.use(express.static(DIST_DIR));
+app.use(express.static(__dirname));
 
 app.get("/", (req, res) => {
-  const index = path.join(__dirname, "dist", "index.html");
+  const index = path.join(__dirname, "index.html");
   res.sendFile(index);
 });
 
