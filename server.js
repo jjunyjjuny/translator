@@ -1,8 +1,8 @@
-const express = require("express");
 const path = require("path");
-
+const express = require("express");
 const app = express();
-const port = process.env.PORT || 8080;
+
+const PORT = process.env.PORT || 8080;
 
 const DIST_DIR = path.join(__dirname, "dist");
 
@@ -13,4 +13,4 @@ app.get("/", (req, res) => {
   res.sendFile(index);
 });
 
-app.listen(port, () => console.log("running server"));
+app.listen(PORT, () => console.log("running server"));
