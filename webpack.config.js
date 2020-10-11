@@ -4,6 +4,6 @@ module.exports = {
   entry: "./google_translator.js",
   output: {
     filename: "bundle.js",
-    path: path.resolve(__dirname, "dist"),
+    path: path.join(__dirname, "dist"),
   },
 };
