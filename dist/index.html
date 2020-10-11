@@ -1,0 +1,62 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Translator</title>
+    <style>
+      * {
+        margin: 0;
+        padding: 0;
+      }
+      header {
+        height: 100px;
+        text-align: center;
+        line-height: 100px;
+        font-size: 20px;
+      }
+
+      .container {
+        display: flex;
+        justify-content: space-around;
+      }
+
+      .left {
+        background: #cec0c0;
+        width: 500px;
+        height: 500px;
+      }
+      .right {
+        background: #9accc8;
+        width: 500px;
+        height: 500px;
+      }
+    </style>
+    <script src="http://code.jquery.com/jquery-latest.js"></script>
+  </head>
+  <body>
+    <header>번역기 테스트</header>
+    <section class="container">
+      <section class="left">
+        <div class="text">
+          <textarea name="original-text" id="original-text" cols="30" rows="10"></textarea>
+          <select name="translate-target" id="translate-target">
+            <option value="ko">한국어</option>
+            <option value="en">영어</option>
+            <option value="ru">러시아어</option>
+          </select>
+          <button id="btn_translate">번역하기</button>
+        </div>
+      </section>
+      <div>
+        <button id='btn_translate'></button>
+      </div>
+      <section class="right">
+        <div class="translate-google">
+          <textarea name="translate-text" id="translate-text" cols="30" rows="10"></textarea>
+        </div>
+      </section>
+    </section>
+    <script src="restFront.js"></script>
+  </body>
+</html>
