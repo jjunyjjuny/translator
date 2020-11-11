@@ -20,7 +20,7 @@ module.exports.detectLanguage = async (text) => {
   }
 };
 
-module.exports.translateText = async (text, targetLanguage) => {
+module.exports.googleTranslator = async (text, targetLanguage) => {
   try {
     let [response] = await translate.translate(text, targetLanguage);
     console.log("response : ", response);

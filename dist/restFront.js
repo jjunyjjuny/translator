@@ -1,18 +1,17 @@
 "use strict";
 $(document).ready(() => {
   $("#btn_translate").click(() => {
-    console.log("button click");
     const originalBox = document.getElementById("original-text");
-    console.log(originalBox);
     const original = originalBox.value;
     const targetBox = document.getElementById("translate-target");
     const target = targetBox.options[targetBox.selectedIndex].value;
-
+    const source = "en";
+    const type = "papago";
     $.ajax({
       url: "/translate",
       dataType: "json",
       type: "POST",
-      data: { original: original, target: target },
+      data: { original: original, source: source, target: target, type: type },
       success: (result) => {
         if (result) {
           $("#translate-text").html(result.result);

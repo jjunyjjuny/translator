@@ -1,6 +1,7 @@
 "use strict";
 
-const { detectLanguage, translateText } = require("./google_translator");
+const { detectLanguage, googleTranslator } = require("./google_translator");
+const { papagoTranslator } = require("./papago_translator");
 const bodyParser = require("body-parser");
 const path = require("path");
 const express = require("express");
@@ -19,12 +20,30 @@ app.get("/", (req, res) => {
   res.sendFile(index);
 });
 
+// google translate
 app.post("/translate", async (req, res) => {
   const response = {
     text: req.body.original,
     target: req.body.target,
+    type: req.body.type,
+    source: req.body.source
   };
-  const translation = await translateText(response.text, response.target);
+  let translation = "";
+  switch (response.type) {
+    case "google":
+      translation = await googleTranslator(response.text, response.target);
+      console.log("google");
+      break;
+    case "papago":
+      translation = await papagoTranslator(response.text, response.source, response.target);
+      console.log("papago");
+      break;
+    case "kakao":
+      translation = await googleTranslator(response.text, response.target);
+      console.log("kakao");
+      break;
+  }
+  console.log('server.js - translation :', translation)
   res.send({ result: translation });
 });
 
