@@ -1,4 +1,5 @@
 # [translator](https://jjuny-translator.herokuapp.com/)
+## [Notion](https://www.notion.so/da94d6eee4484ea587390886dac9b28d)
 
 ## What is
 
