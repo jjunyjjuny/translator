@@ -2,6 +2,8 @@
 
 const { detectLanguage, googleTranslator } = require("./translator/google");
 const { papagoTranslator } = require("./translator/papago");
+const { kakaoTranslator } = require("./translator/kakao");
+
 const bodyParser = require("body-parser");
 const path = require("path");
 const express = require("express");
@@ -26,7 +28,7 @@ app.post("/translate", async (req, res) => {
     text: req.body.original,
     target: req.body.target,
     type: req.body.type,
-    source: req.body.source
+    source: req.body.source,
   };
   let translation = "";
   switch (response.type) {
@@ -35,15 +37,23 @@ app.post("/translate", async (req, res) => {
       console.log("google");
       break;
     case "papago":
-      translation = await papagoTranslator(response.text, response.source, response.target);
+      translation = await papagoTranslator(
+        response.text,
+        response.source,
+        response.target
+      );
       console.log("papago");
       break;
     case "kakao":
-      translation = await googleTranslator(response.text, response.target);
+      translation = await kakaoTranslator(
+        response.text,
+        response.source,
+        response.target
+      );
       console.log("kakao");
       break;
   }
-  console.log('server.js - translation :', translation)
+  console.log("server.js - translation :", translation);
   res.send({ result: translation });
 });
 
