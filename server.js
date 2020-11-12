@@ -1,7 +1,7 @@
 "use strict";
 
-const { detectLanguage, googleTranslator } = require("./google_translator");
-const { papagoTranslator } = require("./papago_translator");
+const { detectLanguage, googleTranslator } = require("./translator/google");
+const { papagoTranslator } = require("./translator/papago");
 const bodyParser = require("body-parser");
 const path = require("path");
 const express = require("express");
