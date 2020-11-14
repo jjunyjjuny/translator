@@ -1,6 +1,11 @@
-# [translator](https://jjuny-translator.herokuapp.com/)
+# [홍송남 번역기](https://jjuny-translator.herokuapp.com/)
+구글, 파파고, 카카오톡 번역 API를 활용한 다중 번역 사이트.
+
 ## [Notion](https://www.notion.so/da94d6eee4484ea587390886dac9b28d)
 
-## What is
+## Used Stack
 
-- 구글, 파파고, 카카오 번역기 api를 활용한 동시 번역 사이트(개발중)
+- HTML/CSS
+- Javascript
+- Node.js
+- Google, Papago, Kakao translate API
