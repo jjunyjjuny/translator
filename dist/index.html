@@ -5,108 +5,114 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <title>Translator</title>
     <link rel="stylesheet" href="reset.css" />
-    <link rel="stylesheet" href="style.css">
-    <style>
-      * {
-        margin: 0;
-        padding: 0;
-      }
-      header {
-        height: 100px;
-        text-align: center;
-        line-height: 100px;
-        font-size: 20px;
-      }
-
-      .container {
-        display: flex;
-        justify-content: space-around;
-      }
-
-      .left {
-        background: #cec0c0;
-        width: 500px;
-        height: 500px;
-      }
-      .right {
-        background: #9accc8;
-        width: 500px;
-        height: 500px;
-      }
-    </style>
+    <link rel="stylesheet" href="style.css" />
+    <style></style>
     <script src="https://code.jquery.com/jquery-latest.js"></script>
   </head>
   <body>
-    <header>홍송남 번역기</header>
-    <nav>
-      <ul>
-        <li>기본</li>
-        <li>이중번역</li>
-        <li>결과비교</li>
-        <li>다양한 원문</li>
-      </ul>
-    </nav>
-    <section class="container">
-      <article class="left">
-        <div>title</div>
-        <div>
-          <div class="box-menu">
-            <span>최소화</span>
-            <span>닫기</span>
-          </div>
-          <div class="box-nav">
-            <div class="engine-select">
-              <div>img</div>
-              <div>papago</div>
-              <div>...</div>
+    <div class="wrap flex">
+      <aside class="side_note">side note</aside>
+      <div class="container">
+        <header>
+          <h1>홍송남 번역기</h1>
+        </header>
+        <nav>
+          <ul class="flex">
+            <li>기본</li>
+            <li>이중번역</li>
+            <li>결과비교</li>
+            <li>다양한 원문</li>
+          </ul>
+        </nav>
+        <section class="board flex">
+          <article class="column">
+            <h2>입력</h2>
+            <article class="card">
+              <div class="card-menu flex">
+                <span>최소화</span>
+                <span>닫기</span>
+              </div>
+              <div class="card-nav">
+                <div class="engine-select flex">
+                  <div>ㅁ</div>
+                  <div>google</div>
+                  <select>
+                    <option value="...">...</option>
+                    <option value="google">구글</option>
+                    <option value="papago">파파고</option>
+                    <option value="kakao">카카오</option>
+                  </select>
+                </div>
+                <div class="language-select flex">
+                  <ul class="flex">
+                    <li>
+                      <input
+                        type="radio"
+                        id="ko"
+                        value="ko"
+                        name="targetLanguages"
+                      /><label for="ko">한국어</label>
+                    </li>
+                    <li>
+                      <input
+                        type="radio"
+                        id="en"
+                        value="en"
+                        name="targetLanguages"
+                        checked
+                      /><label for="en">영어</label>
+                    </li>
+                    <li>
+                      <input
+                        type="radio"
+                        id="ru"
+                        value="ru"
+                        name="targetLanguages"
+                      /><label for="ru">러시아어</label>
+                    </li>
+
+                    <li>...</li>
+                  </ul>
+                </div>
+              </div>
+              <div>
+                <textarea
+                  name="original-text"
+                  id="original-text"
+                  cols="30"
+                  rows="10"
+                ></textarea>
+              </div>
+            </article>
+            <div class="text">
+              <select name="translate-target" id="translate-target">
+                <option value="kr">한국어</option>
+                <option value="en">영어</option>
+                <option value="ru">러시아어</option>
+              </select>
+
+              <button id="btn_translate">번역하기</button>
+              <select name="translator-type" id="translator-type">
+                <option value="google">google</option>
+                <option value="papago">papago</option>
+                <option value="kakao">kakao</option>
+              </select>
             </div>
-            <div class="language-select">
-              <ul>
-                <li>한국어</li>
-                <li>영어</li>
-                <li>중국어</li>
-                <li>일본어</li>
-                <li>...</li>
-              </ul>
+          </article>
+
+          <article class="column">
+            <div class="translate-google">
+              <textarea
+                name="translate-text"
+                id="translate-text"
+                cols="30"
+                rows="10"
+              ></textarea>
             </div>
-          </div>
-          <div>
-            <textarea
-              name="original-text"
-              id="original-text"
-              cols="30"
-              rows="10"
-            ></textarea>
-          </div>
-        </div>
-        <div class="text">
-          <select name="translate-target" id="translate-target">
-            <option value="kr">한국어</option>
-            <option value="en">영어</option>
-            <option value="ru">러시아어</option>
-          </select>
-          <button id="btn_translate">번역하기</button>
-          <select name="translator-type" id="translator-type">
-            <option value="google">google</option>
-            <option value="papago">papago</option>
-            <option value="kakao">kakao</option>
-          </select>
-        </div>
-      </article>
-      <div>
-        <button id="btn_translate"></button>
+          </article>
+        </section>
       </div>
-      <article class="right">
-        <div class="translate-google">
-          <textarea
-            name="translate-text"
-            id="translate-text"
-            cols="30"
-            rows="10"
-          ></textarea>
-        </div>
-      </article>
-    </section>
+    </div>
     <script src="restFront.js"></script>
   </body>
 </html>
