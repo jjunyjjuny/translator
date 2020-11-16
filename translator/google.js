@@ -30,3 +30,5 @@ module.exports.googleTranslator = async (query, targetLanguage) => {
     return 0;
   }
 };
+
+
