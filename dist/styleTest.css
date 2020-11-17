@@ -1,0 +1,85 @@
+html,
+body {
+  height: 100%;
+}
+.flex {
+  display: flex;
+}
+.wrap {
+  justify-content: center;
+  position: relative;
+  height: 100%;
+}
+
+.side_note {
+  position: absolute;
+  left: 0;
+  height: 100%;
+}
+.container {
+  display: inline-block;
+  margin: 0 auto;
+
+  margin: 0 auto;
+}
+header {
+  height: 100px;
+  line-height: 100px;
+  font-size: 20px;
+}
+nav {
+  height: 50px;
+}
+
+nav > ul > li + li {
+  margin-left: 15px;
+}
+#board {
+  justify-content: space-around;
+}
+
+.column {
+  width: 300px;
+  height: 500px;
+}
+.column + .column {
+  margin-left: 100px;
+}
+.column > h2 {
+}
+.column > .card {
+}
+.column > .card > .card-menu {
+  justify-content: flex-end;
+}
+.column > .card > .card-nav {
+}
+.column > .card > .card-nav > .engine-select {
+}
+.column > .card > .card-nav > .language-select input[type="radio"] {
+  overflow: hidden;
+  position: absolute;
+  left: -9999px;
+  width: 1px;
+  height: 1px;
+}
+.column
+  > .card
+  > .card-nav
+  > .language-select
+  input[type="radio"]:checked
+  + label {
+  background-color: #454a60;
+  color: #fff;
+}
+.column > .card > .card-nav > .language-select label {
+  display: inline-block;
+  width: 100%;
+  height: 100%;
+  color: #454a60;
+  cursor: pointer;
+  border: 1px solid black;
+}
+.column > .card > .card-nav > .language-select li + li {
+  margin-left: 10px;
+}
