@@ -1,5 +1,6 @@
 "use strict";
 <<<<<<< HEAD
+<<<<<<< HEAD
 import { restAPI } from "./restApi.js";
 const SUPPORT_LANGUAGE = [
   "한국어",
@@ -69,6 +70,8 @@ function createCard(columnIndex, isFirstClomun) {
   }
 =======
 
+=======
+>>>>>>> 74dc787... eventListener-restAPI() 연결 성공
 import { restAPI } from "./restApi.js";
 
 const GOOGLE_SUPPORT_LANGUAGE = {
@@ -96,10 +99,10 @@ const KAKAO_SUPPORT_LANGUAGE = {
 };
 //defaul
 //이 배열의 index는 column의 넘버, 그 index의 값은 card의 갯수로 인지한다
-const colAndCardIndex = [];
 
+const colAndCardIndex = [];
 const board = document.getElementById("board");
-board.innerHTML = "aaaaaaaaaaaaaaaa";
+
 function createColumn(isFirstClomun = false) {
   const column = document.createElement("article");
   column.classList.add("column");
@@ -107,7 +110,7 @@ function createColumn(isFirstClomun = false) {
   title.innerHTML = "입력";
   colAndCardIndex.push(0);
   const columnNum = colAndCardIndex.length - 1;
-  const defaultCard = createCard(columnNum, isFirstClomun);
+  const defaultCard = createCard(columnNum, isFirstClomun, isFirstClomun);
   column.appendChild(title);
   column.appendChild(defaultCard);
   return column;
@@ -122,7 +125,7 @@ function createCard(columnNum, isFirstClomun) {
     columnNum,
     cardIndex
   );
-  const textarea = createTextarea(columnNum, cardIndex);
+  const textarea = createTextarea(columnNum, cardIndex, isFirstClomun);
   card.innerHTML = `
     <div class="card-menu flex">
       <span>최소화</span>
@@ -145,9 +148,12 @@ function createCard(columnNum, isFirstClomun) {
         `
       }
     </div>
-    ${textarea.outerHTML}
   `;
+<<<<<<< HEAD
 >>>>>>> b950032... type=module시 main.js가 인식되지 않는 이유??
+=======
+  card.appendChild(textarea);
+>>>>>>> 74dc787... eventListener-restAPI() 연결 성공
   return card;
 }
 function createListBySurpportLanguageOfTranslator(
@@ -376,20 +382,26 @@ function createFooter(columnIndex, rowIndex) {
     ul.appendChild(li);
     div.appendChild(ul);
   }
-  console.log(div);
   return div;
 }
 
-function createTextarea(columnNum, cardIndex) {
+function createTextarea(columnNum, cardIndex, isFirstClomun) {
   const textarea = document.createElement("textarea");
-  textarea.setAttribute("id", `textarea-${columnNum}-${cardIndex} `);
-  textarea.addEventListener("change", restAPI(columnNum - 1, cardIndex));
+  textarea.setAttribute("id", `textarea-${columnNum}-${cardIndex}`);
+  console.log("isFirstCloumn :", isFirstClomun);
+  if (!isFirstClomun) {
+    textarea.addEventListener("change", () => {
+      console.log("textarea is changed");
+      restAPI(columnNum - 1, cardIndex);
+    });
+  }
   return textarea;
 }
 
 >>>>>>> b950032... type=module시 main.js가 인식되지 않는 이유??
 function setDefault() {
   board.appendChild(createColumn(true));
+  console.log("finish first append");
   board.appendChild(createColumn());
 }
 
@@ -420,6 +432,7 @@ function setChild(childOfCard, parent, child) {
 const btnTest = document.getElementById("btnTest");
 btnTest.addEventListener("click", () => {
 <<<<<<< HEAD
+<<<<<<< HEAD
   board.appendChild(createColumn());
 });
 
@@ -431,3 +444,9 @@ window.parent = [1, 1];
   board.appendChild(createColumn());
 });
 >>>>>>> b950032... type=module시 main.js가 인식되지 않는 이유??
+=======
+  board.appendChild(createColumn());
+});
+
+document.addEventListener("DOMContentLoaded", setDefault());
+>>>>>>> 74dc787... eventListener-restAPI() 연결 성공
