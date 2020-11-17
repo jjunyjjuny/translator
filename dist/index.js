@@ -1,5 +1,4 @@
 "use strict";
-import { restAPI } from "./restApi";
 const GOOGLE_SUPPORT_LANGUAGE = {
   한국어: "ko",
   영어: "en",
@@ -51,6 +50,7 @@ function createCard(columnNum, isFirstClomun) {
     columnNum,
     cardIndex
   );
+  const textarea = createTextarea(columnNum, cardIndex);
   card.innerHTML = `
     <div class="card-menu flex">
       <span>최소화</span>
@@ -70,21 +70,11 @@ function createCard(columnNum, isFirstClomun) {
           </select>
         </div>
       ${surppotrLanguageList.outerHTML}
-        
         `
       }
     </div>
-    <textarea
-      id="textarea-${columnNum}-${cardIndex}"
-      cols="30"
-      rows="10"
-     ></textarea>
+    ${textarea.outerHTML}
   `;
-  document
-    .getElementById(`textarea-${columnNum}-${cardIndex}`)
-    .addEventListener("change", () => {
-      restAPI();
-    });
   return card;
 }
 function createListBySurpportLanguageOfTranslator(
@@ -98,7 +88,7 @@ function createListBySurpportLanguageOfTranslator(
   ul.classList.add("flex");
   const columnName = `column-${columnIndex}-${cardIndex}`;
   let radio_count = 0;
-  for (key in supporedLanguae) {
+  for (const key in supporedLanguae) {
     const li = document.createElement("li");
     const input = document.createElement("input");
     const radioIndex = `radio-${columnIndex}-${cardIndex}-${radio_count++}`;
@@ -127,20 +117,19 @@ function createListBySurpportLanguageOfTranslator(
   console.log(div);
   return div;
 }
+
+function createTextarea(columnNum, cardIndex) {
+  const textarea = document.createElement("textarea");
+  textarea.setAttribute("id", `textarea-${columnNum}-${cardIndex} `);
+  return textarea;
+}
+
 function set() {
   board.appendChild(createColumn(true));
   board.appendChild(createColumn());
 }
+
 //test function
-function test() {
-  console.log("test on");
-  const testDIV = createListBySurpportLanguageOfTranslator(
-    GOOGLE_SUPPORT_LANGUAGE,
-    1,
-    1
-  );
-  board.appendChild(testDIV);
-}
 
 const btnTest = document.getElementById("btnTest");
 btnTest.addEventListener("click", () => {

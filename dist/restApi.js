@@ -1,8 +1,14 @@
 "use strict";
 
-export function restAPI(indexOfOriginalCard) {
+function restAPI(indexOfOriginalCard) {
+  console.log("restAPI");
   const [originalColumnNum, originalCardIndex] = indexOfOriginalCard;
   const originalText = getOriginalText(originalColumnNum, originalCardIndex);
+  const sourceLanguage = getSourceLanguage(
+    originalColumnNum,
+    originalCardIndex
+  );
+  
 }
 
 function getOriginalText(originalColumnNum, originalCardIndex) {
@@ -11,8 +17,13 @@ function getOriginalText(originalColumnNum, originalCardIndex) {
   );
   return originalTextarea.value;
 }
-function getSourceLanguage() {}
-function getTypeOfTranslator() {}
+function getSourceLanguage(originalColumnNum, originalCardIndex) {
+  const sourceLanguage = document.querySelector(
+    'input[name="radioName"]:checked'
+  ).value;
+  console.log(sourceLanguage);
+}
+function getTypeOfTranslator(originalColumnNum, originalCardIndex) {}
 function getTargetLanguage() {}
 function getTranslatedText() {}
 function insertTranslatedTextToBox() {}
@@ -44,3 +55,4 @@ $.ajax({
     );
   },
 });
+
