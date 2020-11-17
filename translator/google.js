@@ -1,3 +1,4 @@
+"use strict";
 const { Translate } = require("@google-cloud/translate").v2;
 require("dotenv").config();
 
@@ -30,5 +31,3 @@ module.exports.googleTranslator = async (query, targetLanguage) => {
     return 0;
   }
 };
-
-

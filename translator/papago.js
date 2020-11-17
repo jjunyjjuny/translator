@@ -1,3 +1,4 @@
+"use strict";
 require("dotenv").config();
 const CREDENTIALS_PAPAGO = JSON.parse(process.env.CREDENTIALS_PAPAGO);
 
