@@ -1,4 +1,7 @@
 "use strict";
+
+import { restAPI } from "./restApi.js";
+
 const GOOGLE_SUPPORT_LANGUAGE = {
   한국어: "ko",
   영어: "en",
@@ -27,7 +30,7 @@ const KAKAO_SUPPORT_LANGUAGE = {
 const colAndCardIndex = [];
 
 const board = document.getElementById("board");
-
+board.innerHTML = "aaaaaaaaaaaaaaaa";
 function createColumn(isFirstClomun = false) {
   const column = document.createElement("article");
   column.classList.add("column");
@@ -121,10 +124,11 @@ function createListBySurpportLanguageOfTranslator(
 function createTextarea(columnNum, cardIndex) {
   const textarea = document.createElement("textarea");
   textarea.setAttribute("id", `textarea-${columnNum}-${cardIndex} `);
+  textarea.addEventListener("change", restAPI(columnNum - 1, cardIndex));
   return textarea;
 }
 
-function set() {
+function setDefault() {
   board.appendChild(createColumn(true));
   board.appendChild(createColumn());
 }
