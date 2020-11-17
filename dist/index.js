@@ -1,4 +1,5 @@
 "use strict";
+import { restAPI } from "./restApi";
 const GOOGLE_SUPPORT_LANGUAGE = {
   한국어: "ko",
   영어: "en",
@@ -79,6 +80,11 @@ function createCard(columnNum, isFirstClomun) {
       rows="10"
      ></textarea>
   `;
+  document
+    .getElementById(`textarea-${columnNum}-${cardIndex}`)
+    .addEventListener("change", () => {
+      restAPI();
+    });
   return card;
 }
 function createListBySurpportLanguageOfTranslator(
