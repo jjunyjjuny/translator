@@ -1,3 +1,4 @@
+<<<<<<< HEAD
 const childOfCard = [[[[1, 0]]]];
 
 function setChild(childOfCard, parent, child) {
@@ -22,3 +23,6 @@ setChild(childOfCard, [1, 1], [2, 1]);
 setChild(childOfCard, [1, 1], [2, 2]);
 setChild(childOfCard, [1, 0], [2, 3]);
 
+=======
+console.log("why");
+>>>>>>> b950032... type=module시 main.js가 인식되지 않는 이유??

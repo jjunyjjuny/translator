@@ -1,14 +1,13 @@
 "use strict";
-
-function restAPI(indexOfOriginalCard) {
+export function restAPI(originalColumnNum, originalCardIndex) {
   console.log("restAPI");
-  const [originalColumnNum, originalCardIndex] = indexOfOriginalCard;
+
   const originalText = getOriginalText(originalColumnNum, originalCardIndex);
   const sourceLanguage = getSourceLanguage(
     originalColumnNum,
     originalCardIndex
   );
-  
+  console.log("hi");
 }
 
 function getOriginalText(originalColumnNum, originalCardIndex) {
@@ -56,3 +55,6 @@ $.ajax({
   },
 });
 
+export function test(a) {
+  console.log(a);
+}
