@@ -1,3 +1,4 @@
+"use strict";
 const GOOGLE_SUPPORT_LANGUAGE = {
   한국어: "ko",
   영어: "en",
@@ -27,20 +28,20 @@ const colAndCardIndex = [];
 
 const board = document.getElementById("board");
 
-function createColumn() {
+function createColumn(isFirstClomun = false) {
   const column = document.createElement("article");
   column.classList.add("column");
   const title = document.createElement("h2");
   title.innerHTML = "입력";
   colAndCardIndex.push(0);
   const columnNum = colAndCardIndex.length - 1;
-  const defaultCard = createCard(columnNum);
+  const defaultCard = createCard(columnNum, isFirstClomun);
   column.appendChild(title);
   column.appendChild(defaultCard);
   return column;
 }
 
-function createCard(columnNum) {
+function createCard(columnNum, isFirstClomun) {
   const card = document.createElement("article");
   card.classList.add("card");
   const cardIndex = colAndCardIndex[columnNum]++;
@@ -55,17 +56,22 @@ function createCard(columnNum) {
       <span>닫기</span>
     </div>
     <div class="card-nav">
-      <div class="engine-select flex">
-        <div>ㅁ</div>
-        <div>google</div>
-        <select class="translator_type">
-        <option value="...">...</option>
-        <option value="google">구글</option>
-        <option value="papago">파파고</option>
-        <option value="kakao">카카오</option>
-        </select>
-      </div>
+      ${
+        isFirstClomun
+          ? surppotrLanguageList.outerHTML
+          : `<div class="engine-select flex">
+          <div>ㅁ</div>
+          <div>google</div>
+          <select class="translator_type">
+            <option value="google">구글</option>
+            <option value="papago">파파고</option>
+            <option value="kakao">카카오</option>
+          </select>
+        </div>
       ${surppotrLanguageList.outerHTML}
+        
+        `
+      }
     </div>
     <textarea
       id="textarea-${columnNum}-${cardIndex}"
@@ -94,9 +100,16 @@ function createListBySurpportLanguageOfTranslator(
     input.setAttribute("id", radioIndex);
     input.setAttribute("value", supporedLanguae[key]);
     input.setAttribute("name", columnName);
-    if (key === "영어") {
-      input.setAttribute("checked", "checked");
+    if (columnIndex === 0) {
+      if (key === "한국어") {
+        input.setAttribute("checked", "checked");
+      }
+    } else {
+      if (key === "영어") {
+        input.setAttribute("checked", "checked");
+      }
     }
+
     const label = document.createElement("label");
     label.setAttribute("for", radioIndex);
     label.innerHTML = key;
@@ -109,7 +122,7 @@ function createListBySurpportLanguageOfTranslator(
   return div;
 }
 function set() {
-  board.appendChild(createColumn());
+  board.appendChild(createColumn(true));
   board.appendChild(createColumn());
 }
 //test function
