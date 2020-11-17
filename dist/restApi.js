@@ -5,8 +5,8 @@ $(document).ready(() => {
     const original = originalBox.value;
     const targetBox = document.getElementById("translate-target");
     const target = targetBox.options[targetBox.selectedIndex].value;
-    const source = "en";
-    const type = "kakao";
+    const type = document.querySelector(".translator_type").value;
+    const source = "ko";
     $.ajax({
       url: "/translate",
       dataType: "json",
