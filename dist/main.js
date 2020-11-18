@@ -125,6 +125,11 @@ function createCard(columnNum, isFirstClomun) {
     columnNum,
     cardIndex
   );
+  const selector = createSelectorOfTranslatorType(
+    columnNum,
+    cardIndex,
+    isFirstClomun
+  );
   const textarea = createTextarea(columnNum, cardIndex, isFirstClomun);
   card.innerHTML = `
     <div class="card-menu flex">
@@ -138,11 +143,7 @@ function createCard(columnNum, isFirstClomun) {
           : `<div class="engine-select flex">
           <div>ㅁ</div>
           <div>google</div>
-          <select class="translator_type">
-            <option value="google">구글</option>
-            <option value="papago">파파고</option>
-            <option value="kakao">카카오</option>
-          </select>
+          ${selector.outerHTML}
         </div>
       ${surppotrLanguageList.outerHTML}
         `
@@ -389,13 +390,24 @@ function createTextarea(columnNum, cardIndex, isFirstClomun) {
   const textarea = document.createElement("textarea");
   textarea.setAttribute("id", `textarea-${columnNum}-${cardIndex}`);
   console.log("isFirstCloumn :", isFirstClomun);
-  if (!isFirstClomun) {
+  if (isFirstClomun) {
     textarea.addEventListener("change", () => {
       console.log("textarea is changed");
-      restAPI(columnNum - 1, cardIndex);
+      restAPI(columnNum, cardIndex);
     });
   }
   return textarea;
+}
+function createSelectorOfTranslatorType(columnNum, cardIndex, isFirstClomun) {
+  if (!isFirstClomun) {
+    const selector = document.createElement("select");
+    selector.setAttribute("id", `selector-${columnNum}-${cardIndex}`);
+    selector.innerHTML = `<option value="google">구글</option>
+    <option value="papago">파파고</option>
+    <option value="kakao">카카오</option>`;
+    console.log("selector :", selector);
+    return selector;
+  }
 }
 
 >>>>>>> b950032... type=module시 main.js가 인식되지 않는 이유??

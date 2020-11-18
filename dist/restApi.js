@@ -8,27 +8,36 @@ export function restAPI(originalColumnNum, originalCardIndex) {
     originalColumnNum,
     originalCardIndex
   );
+  const TypeOfTranslator = getTypeOfTranslator(
+    originalColumnNum,
+    originalCardIndex
+  );
 }
 
 function getOriginalText(originalColumnNum, originalCardIndex) {
   console.log(originalColumnNum, originalCardIndex);
   console.log("id :", `textarea-${originalColumnNum}-${originalCardIndex}`);
-  const originalTextarea = document.querySelector(
+  const originalText = document.querySelector(
     `#textarea-${originalColumnNum}-${originalCardIndex}`
-  );
-  console.log("originalTextarea :", originalTextarea);
-  return originalTextarea.value;
+  ).value;
+  return originalText;
 }
 function getSourceLanguage(originalColumnNum, originalCardIndex) {
   const sourceLanguage = document.querySelector(
     `input[name="column-${originalColumnNum}-${originalCardIndex}"]:checked`
   ).value;
-  console.log("sourceLanguage :", sourceLanguage);
+  return sourceLanguage;
 }
-function getTypeOfTranslator(originalColumnNum, originalCardIndex) {}
-function getTargetLanguage() {}
-function getTranslatedText() {}
-function insertTranslatedTextToBox() {}
+function getTypeOfTranslator(originalColumnNum, originalCardIndex) {
+  const TypeOfTranslator = document.querySelector(
+    `#selector-${originalColumnNum + 1}-${originalCardIndex}`
+  );
+}
+function getTargetLanguage(originalColumnNum, originalCardIndex) {
+  
+}
+function getTranslatedText(originalColumnNum, originalCardIndex) {}
+function insertTranslatedTextToBox(originalColumnNum, originalCardIndex) {}
 
 // const originalBox = document.getElementById("original-text");
 // const original = originalBox.value;
