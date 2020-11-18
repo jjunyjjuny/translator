@@ -351,11 +351,10 @@ function createFooter(columnIndex, rowIndex) {
 =======
   cardIndex
 ) {
-  const div = document.createElement("div");
-  div.classList.add("language-select", "flex");
+  const surppotrLanguageListDIV = document.createElement("div");
+  surppotrLanguageListDIV.classList.add("language-select", "flex");
   const ul = document.createElement("ul");
   ul.classList.add("flex");
-  const columnName = `column-${columnIndex}-${cardIndex}`;
   let radio_count = 0;
   for (const key in supporedLanguae) {
     const li = document.createElement("li");
@@ -363,8 +362,8 @@ function createFooter(columnIndex, rowIndex) {
     const radioIndex = `radio-${columnIndex}-${cardIndex}-${radio_count++}`;
     input.setAttribute("type", "radio");
     input.setAttribute("id", radioIndex);
+    input.setAttribute("name", radioIndex);
     input.setAttribute("value", supporedLanguae[key]);
-    input.setAttribute("name", columnName);
     if (columnIndex === 0) {
       if (key === "한국어") {
         input.setAttribute("checked", "checked");
@@ -381,9 +380,9 @@ function createFooter(columnIndex, rowIndex) {
     li.appendChild(input);
     li.appendChild(label);
     ul.appendChild(li);
-    div.appendChild(ul);
+    surppotrLanguageListDIV.appendChild(ul);
   }
-  return div;
+  return surppotrLanguageListDIV;
 }
 
 function createTextarea(columnNum, cardIndex, isFirstClomun) {

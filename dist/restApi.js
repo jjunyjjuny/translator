@@ -24,7 +24,7 @@ function getOriginalText(originalColumnNum, originalCardIndex) {
 }
 function getSourceLanguage(originalColumnNum, originalCardIndex) {
   const sourceLanguage = document.querySelector(
-    `input[name="column-${originalColumnNum}-${originalCardIndex}"]:checked`
+    `input[name="radio-${originalColumnNum}-${originalCardIndex}"]:checked`
   ).value;
   return sourceLanguage;
 }
@@ -34,7 +34,10 @@ function getTypeOfTranslator(originalColumnNum, originalCardIndex) {
   );
 }
 function getTargetLanguage(originalColumnNum, originalCardIndex) {
-  
+  const targetLanguage = document.querySelector(
+    `input[name="radio-${originalColumnNum + 1}-${originalCardIndex}"]:checked`
+  );
+  return targetLanguage;
 }
 function getTranslatedText(originalColumnNum, originalCardIndex) {}
 function insertTranslatedTextToBox(originalColumnNum, originalCardIndex) {}
