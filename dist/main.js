@@ -1,29 +1,14 @@
 "use strict";
 import { restAPI } from "./restApi.js";
+const SUPPORT_LANGUAGE = [
+  "한국어",
+  "영어",
+  "일본어",
+  "중국어(간체)",
+  "중국어(번체)",
+  "독일어",
+];
 
-const GOOGLE_SUPPORT_LANGUAGE = {
-  한국어: "ko",
-  영어: "en",
-  일본어: "ja",
-  "중국어(간체)": "zh-CN",
-  "중국어(번체)": "zh-TW",
-  독일어: "de",
-};
-const PAPAGO_SUPPORT_LANGUAGE = {
-  한국어: "ko",
-  영어: "en",
-  일본어: "ja",
-  "중국어(간체)": "zh-cn",
-  "중국어(번체)": "zh-tw",
-  독일어: "de",
-};
-const KAKAO_SUPPORT_LANGUAGE = {
-  한국어: "kr",
-  영어: "en",
-  일본어: "jp",
-  중국어: "cn",
-  독일어: "de",
-};
 //defaul
 //이 배열의 index는 column의 넘버, 그 index의 값은 card의 갯수로 인지한다
 
@@ -48,7 +33,7 @@ function createCard(columnNum, isFirstClomun) {
   card.classList.add("card");
   const cardIndex = colAndCardIndex[columnNum]++;
   const surppotrLanguageList = createListBySurpportLanguageOfTranslator(
-    GOOGLE_SUPPORT_LANGUAGE,
+    SUPPORT_LANGUAGE,
     columnNum,
     cardIndex
   );
@@ -90,32 +75,33 @@ function createListBySurpportLanguageOfTranslator(
   const ul = document.createElement("ul");
   ul.classList.add("flex");
   let radio_count = 0;
-  for (const key in supporedLanguae) {
+  SUPPORT_LANGUAGE.forEach((lan) => {
     const li = document.createElement("li");
     const input = document.createElement("input");
     const radioIndex = `radio-${columnIndex}-${cardIndex}-${radio_count++}`;
     input.setAttribute("type", "radio");
     input.setAttribute("id", radioIndex);
     input.setAttribute("name", `radio-${columnIndex}-${cardIndex}`);
-    input.setAttribute("value", supporedLanguae[key]);
+    input.setAttribute("value", lan);
     if (columnIndex === 0) {
-      if (key === "한국어") {
+      if (lan === "한국어") {
         input.setAttribute("checked", "checked");
       }
     } else {
-      if (key === "영어") {
+      if (lan === "영어") {
         input.setAttribute("checked", "checked");
       }
     }
 
     const label = document.createElement("label");
     label.setAttribute("for", radioIndex);
-    label.innerHTML = key;
+    label.innerHTML = lan;
     li.appendChild(input);
     li.appendChild(label);
     ul.appendChild(li);
     surppotrLanguageListDIV.appendChild(ul);
-  }
+  });
+
   return surppotrLanguageListDIV;
 }
 
@@ -123,8 +109,8 @@ function createTextarea(columnNum, cardIndex, isFirstClomun) {
   const textarea = document.createElement("textarea");
   textarea.setAttribute("id", `textarea-${columnNum}-${cardIndex}`);
   if (isFirstClomun) {
-    textarea.addEventListener("change", async () => {
-      await restAPI(columnNum, cardIndex);
+    textarea.addEventListener("change", () => {
+      restAPI(columnNum, cardIndex);
     });
   }
   return textarea;
@@ -153,3 +139,4 @@ btnTest.addEventListener("click", () => {
 });
 
 document.addEventListener("DOMContentLoaded", setDefault());
+console.log(colAndCardIndex);
