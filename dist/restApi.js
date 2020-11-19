@@ -1,24 +1,49 @@
 "use strict";
+const GOOGLE_SUPPORT_LANGUAGE = {
+  한국어: "ko",
+  영어: "en",
+  일본어: "ja",
+  "중국어(간체)": "zh-CN",
+  "중국어(번체)": "zh-TW",
+  독일어: "de",
+};
+const PAPAGO_SUPPORT_LANGUAGE = {
+  한국어: "ko",
+  영어: "en",
+  일본어: "ja",
+  "중국어(간체)": "zh-cn",
+  "중국어(번체)": "zh-tw",
+  독일어: "de",
+};
+const KAKAO_SUPPORT_LANGUAGE = {
+  한국어: "kr",
+  영어: "en",
+  일본어: "jp",
+  중국어: "cn",
+  독일어: "de",
+};
 
 export async function restAPI(originalColumnNum, originalCardIndex) {
   console.log("restAPI on");
 
-  const originalText = getOriginalText(originalColumnNum, originalCardIndex);
+  const typeOfTranslator = getTypeOfTranslator(
+    originalColumnNum,
+    originalCardIndex
+  );
   const sourceLanguage = getSourceLanguage(
     originalColumnNum,
-    originalCardIndex
+    originalCardIndex,
+    typeOfTranslator
   );
-  const TypeOfTranslator = getTypeOfTranslator(
-    originalColumnNum,
-    originalCardIndex
-  );
+  const originalText = getOriginalText(originalColumnNum, originalCardIndex);
   const targetLanguage = getTargetLanguage(
     originalColumnNum,
-    originalCardIndex
+    originalCardIndex,
+    typeOfTranslator
   );
-  console.log(originalText, sourceLanguage, TypeOfTranslator, targetLanguage);
+  console.log(originalText, sourceLanguage, typeOfTranslator, targetLanguage);
   const translatedText = await getTranslatedText(
-    TypeOfTranslator,
+    typeOfTranslator,
     originalText,
     sourceLanguage,
     targetLanguage
@@ -38,26 +63,59 @@ function getOriginalText(originalColumnNum, originalCardIndex) {
   ).value;
   return originalText;
 }
-function getSourceLanguage(originalColumnNum, originalCardIndex) {
+function getSourceLanguage(
+  originalColumnNum,
+  originalCardIndex,
+  typeOfTranslator
+) {
   const sourceLanguage = document.querySelector(
     `input[name="radio-${originalColumnNum}-${originalCardIndex}"]:checked`
   ).value;
-  return sourceLanguage;
+  let sourceLanguageNotation = "";
+  switch (typeOfTranslator) {
+    case "google":
+      sourceLanguageNotation = GOOGLE_SUPPORT_LANGUAGE[sourceLanguage];
+      break;
+    case "papago":
+      sourceLanguageNotation = PAPAGO_SUPPORT_LANGUAGE[sourceLanguage];
+      break;
+    case "kakao":
+      sourceLanguageNotation = KAKAO_SUPPORT_LANGUAGE[sourceLanguage];
+      break;
+  }
+
+  return sourceLanguageNotation;
 }
 function getTypeOfTranslator(originalColumnNum, originalCardIndex) {
-  const TypeOfTranslator = document.querySelector(
+  const typeOfTranslator = document.querySelector(
     `#selector-${originalColumnNum + 1}-${originalCardIndex}`
   );
-  return TypeOfTranslator.value;
+  return typeOfTranslator.value;
 }
-function getTargetLanguage(originalColumnNum, originalCardIndex) {
+function getTargetLanguage(
+  originalColumnNum,
+  originalCardIndex,
+  typeOfTranslator
+) {
   const targetLanguage = document.querySelector(
     `input[name="radio-${originalColumnNum + 1}-${originalCardIndex}"]:checked`
   ).value;
-  return targetLanguage;
+  let targetLanguageNotation = "";
+  switch (typeOfTranslator) {
+    case "google":
+      targetLanguageNotation = GOOGLE_SUPPORT_LANGUAGE[targetLanguage];
+      break;
+    case "papago":
+      targetLanguageNotation = PAPAGO_SUPPORT_LANGUAGE[targetLanguage];
+      break;
+    case "kakao":
+      targetLanguageNotation = KAKAO_SUPPORT_LANGUAGE[targetLanguage];
+      break;
+  }
+  return targetLanguageNotation;
 }
 function getTranslatedText(
-  TypeOfTranslator,
+  typeOfTranslator,
   originalText,
   sourceLanguage,
   targetLanguage
@@ -71,7 +129,7 @@ function getTranslatedText(
         original: originalText,
         source: sourceLanguage,
         target: targetLanguage,
-        type: TypeOfTranslator,
+        type: typeOfTranslator,
       },
       success: (result) => {
         if (result) {
