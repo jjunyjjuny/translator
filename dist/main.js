@@ -362,7 +362,7 @@ function createFooter(columnIndex, rowIndex) {
     const radioIndex = `radio-${columnIndex}-${cardIndex}-${radio_count++}`;
     input.setAttribute("type", "radio");
     input.setAttribute("id", radioIndex);
-    input.setAttribute("name", radioIndex);
+    input.setAttribute("name", `radio-${columnIndex}-${cardIndex}`);
     input.setAttribute("value", supporedLanguae[key]);
     if (columnIndex === 0) {
       if (key === "한국어") {
@@ -388,11 +388,9 @@ function createFooter(columnIndex, rowIndex) {
 function createTextarea(columnNum, cardIndex, isFirstClomun) {
   const textarea = document.createElement("textarea");
   textarea.setAttribute("id", `textarea-${columnNum}-${cardIndex}`);
-  console.log("isFirstCloumn :", isFirstClomun);
   if (isFirstClomun) {
-    textarea.addEventListener("change", () => {
-      console.log("textarea is changed");
-      restAPI(columnNum, cardIndex);
+    textarea.addEventListener("change", async () => {
+      await restAPI(columnNum, cardIndex);
     });
   }
   return textarea;
@@ -404,7 +402,6 @@ function createSelectorOfTranslatorType(columnNum, cardIndex, isFirstClomun) {
     selector.innerHTML = `<option value="google">구글</option>
     <option value="papago">파파고</option>
     <option value="kakao">카카오</option>`;
-    console.log("selector :", selector);
     return selector;
   }
 }
@@ -412,7 +409,6 @@ function createSelectorOfTranslatorType(columnNum, cardIndex, isFirstClomun) {
 >>>>>>> b950032... type=module시 main.js가 인식되지 않는 이유??
 function setDefault() {
   board.appendChild(createColumn(true));
-  console.log("finish first append");
   board.appendChild(createColumn());
 }
 
