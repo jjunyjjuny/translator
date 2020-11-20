@@ -1,4 +1,7 @@
 <<<<<<< HEAD
+<<<<<<< HEAD
+=======
+>>>>>>> d5fd0b1... 너무 많이 바꿨는데 커밋을 안 함;;. restAPI 호출할 때 부모가 있는지, 자식이 있는지에 따라 처리하도록 함, 번역기 바꾸면 바로 restAPI 호출하도록 함
 const childOfCard = [[[[1, 0]]]];
 
 function setChild(childOfCard, parent, child) {
@@ -23,6 +26,9 @@ setChild(childOfCard, [1, 1], [2, 1]);
 setChild(childOfCard, [1, 1], [2, 2]);
 setChild(childOfCard, [1, 0], [2, 3]);
 
+<<<<<<< HEAD
 =======
 console.log("why");
 >>>>>>> b950032... type=module시 main.js가 인식되지 않는 이유??
+=======
+>>>>>>> d5fd0b1... 너무 많이 바꿨는데 커밋을 안 함;;. restAPI 호출할 때 부모가 있는지, 자식이 있는지에 따라 처리하도록 함, 번역기 바꾸면 바로 restAPI 호출하도록 함

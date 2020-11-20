@@ -23,53 +23,101 @@ const KAKAO_SUPPORT_LANGUAGE = {
   독일어: "de",
 };
 
-export async function restAPI(originalColumnNum, originalCardIndex) {
-  console.log("restAPI on");
-
-  const typeOfTranslator = getTypeOfTranslator(
-    originalColumnNum,
-    originalCardIndex
-  );
-  const sourceLanguage = getSourceLanguage(
-    originalColumnNum,
-    originalCardIndex,
-    typeOfTranslator
-  );
-  const originalText = getOriginalText(originalColumnNum, originalCardIndex);
-  const targetLanguage = getTargetLanguage(
-    originalColumnNum,
-    originalCardIndex,
-    typeOfTranslator
-  );
-  console.log(originalText, sourceLanguage, typeOfTranslator, targetLanguage);
-  const translatedText = await getTranslatedText(
-    typeOfTranslator,
-    originalText,
-    sourceLanguage,
-    targetLanguage
-  );
-  console.log("translatedText :", translatedText);
-
-  insertTranslatedTextToBox(
-    translatedText,
-    originalColumnNum,
-    originalCardIndex
-  );
-}
-
-function getOriginalText(originalColumnNum, originalCardIndex) {
-  const originalText = document.querySelector(
-    `#textarea-${originalColumnNum}-${originalCardIndex}`
-  ).value;
-  return originalText;
-}
-function getSourceLanguage(
-  originalColumnNum,
-  originalCardIndex,
-  typeOfTranslator
+export async function restAPI(
+  currentColumnNum,
+  currentCardIndex,
+  parentOfCard,
+  childOfCard
 ) {
+  console.log("restAPI ON");
+  //parent 처리
+  const parent = getParent(parentOfCard, currentColumnNum, currentCardIndex);
+  const children = getChildren(childOfCard, currentColumnNum, currentCardIndex);
+  let source = [];
+  let targets = [[]];
+  let sourceText = "";
+  if (!parent) {
+    if (!children) {
+      console.log("부모x 자식x");
+      // 부모 x 자식 x
+      return;
+    } else {
+      console.log("부모x 자식o");
+      // 부모 x 자식 => o source는 나 자신, target은 자식들
+      source = [currentColumnNum, currentCardIndex];
+      targets = children.slice();
+      sourceText = getSourceText(source);
+      translateEachChild(source, targets, sourceText);
+    }
+  } else {
+    if (!children) {
+      console.log("부모o 자식x");
+      //부모 o 자식 x => source는 부모, target은 나 자신
+      source = parent;
+      targets = [[currentColumnNum, currentCardIndex]];
+      sourceText = getSourceText(source);
+      translateEachChild(source, targets, sourceText);
+    } else {
+      console.log("부모x 자식x");
+      //부모 o 자식 o source 부모, target나 로 1번 한 후에 source 나, target 자식으로 한번 더
+      source = parent;
+      targets = [[currentColumnNum, currentCardIndex]];
+      sourceText = getSourceText(source);
+      translateEachChild(source, targets, sourceText);
+
+      source = [currentColumnNum, currentCardIndex];
+      targets = children.slice();
+      sourceText = getSourceText(source);
+      translateEachChild(source, targets, sourceText);
+    }
+  }
+
+  // chidren 처리(chidren 길이만큼 반복해야 함 (호출, 넣기))
+  async function translateEachChild(source, targets, sourceText) {
+    targets.forEach(async (target) => {
+      const typeOfTranslator = getTypeOfTranslator(target);
+      const sourceLanguage = getSourceLanguage(source, typeOfTranslator);
+      const targetLanguage = getTargetLanguage(target, typeOfTranslator);
+      const translatedText = await getTranslatedText(
+        typeOfTranslator,
+        sourceText,
+        sourceLanguage,
+        targetLanguage
+      );
+      insertTranslatedTextToBox(translatedText, target);
+    });
+  }
+
+  function getParent(parentOfCard, currentColumnNum, currentCardIndex) {
+    const parent = parentOfCard[currentColumnNum][currentCardIndex];
+    if (parent[0] === "no parent") {
+      return false;
+    } else {
+      return parent;
+    }
+  }
+
+  function getChildren(childOfCard, currentColumnNum, currentCardIndex) {
+    if (!childOfCard[currentColumnNum]) {
+      return false;
+    } else {
+      const children = childOfCard[currentColumnNum][currentCardIndex];
+      return children;
+    }
+  }
+}
+
+function getSourceText(source) {
+  const [sourceCol, sourceRow] = source;
+  const sourceText = document.querySelector(
+    `#textarea-${sourceCol}-${sourceRow}`
+  ).value;
+  return sourceText;
+}
+function getSourceLanguage(source, typeOfTranslator) {
+  const [sourceCol, sourceRow] = source;
   const sourceLanguage = document.querySelector(
-    `input[name="radio-${originalColumnNum}-${originalCardIndex}"]:checked`
+    `input[name="radio-${sourceCol}-${sourceRow}"]:checked`
   ).value;
   let sourceLanguageNotation = "";
   switch (typeOfTranslator) {
@@ -86,19 +134,18 @@ function getSourceLanguage(
 
   return sourceLanguageNotation;
 }
-function getTypeOfTranslator(originalColumnNum, originalCardIndex) {
+function getTypeOfTranslator(child) {
+  const [childCol, childRow] = child;
   const typeOfTranslator = document.querySelector(
-    `#selector-${originalColumnNum + 1}-${originalCardIndex}`
+    `#selector-${childCol}-${childRow}`
   );
   return typeOfTranslator.value;
 }
-function getTargetLanguage(
-  originalColumnNum,
-  originalCardIndex,
-  typeOfTranslator
-) {
+function getTargetLanguage(target, typeOfTranslator) {
+  const [targetCol, targetRow] = target;
+
   const targetLanguage = document.querySelector(
-    `input[name="radio-${originalColumnNum + 1}-${originalCardIndex}"]:checked`
+    `input[name="radio-${targetCol}-${targetRow}"]:checked`
   ).value;
   let targetLanguageNotation = "";
   switch (typeOfTranslator) {
@@ -116,7 +163,7 @@ function getTargetLanguage(
 }
 function getTranslatedText(
   typeOfTranslator,
-  originalText,
+  sourceText,
   sourceLanguage,
   targetLanguage
 ) {
@@ -126,14 +173,13 @@ function getTranslatedText(
       dataType: "json",
       type: "POST",
       data: {
-        original: originalText,
+        original: sourceText,
         source: sourceLanguage,
         target: targetLanguage,
         type: typeOfTranslator,
       },
       success: (result) => {
         if (result) {
-          console.log("성공이다리 :", result.result);
           resolve(result.result);
         }
       },
@@ -150,12 +196,9 @@ function getTranslatedText(
     });
   });
 }
-function insertTranslatedTextToBox(
-  translatedText,
-  originalColumnNum,
-  originalCardIndex
-) {
+function insertTranslatedTextToBox(translatedText, target) {
+  const [targetColumnNum, targetCardIndex] = target;
   document.querySelector(
-    `#textarea-${originalColumnNum + 1}-${originalCardIndex}`
+    `#textarea-${targetColumnNum}-${targetCardIndex}`
   ).value = translatedText;
 }

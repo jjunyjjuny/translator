@@ -82,10 +82,10 @@ const SUPPORT_LANGUAGE = [
   "독일어",
 ];
 
-//defaul
-//이 배열의 index는 column의 넘버, 그 index의 값은 card의 갯수로 인지한다
+const colAndRowIndex = [];
+const parentOfCard = [[["no parent"]]];
+const childOfCard = [];
 
-const colAndCardIndex = [];
 const board = document.getElementById("board");
 
 function createColumn(isFirstClomun = false) {
@@ -93,17 +93,20 @@ function createColumn(isFirstClomun = false) {
   column.classList.add("column");
   const title = document.createElement("h2");
   title.innerHTML = "입력";
-  colAndCardIndex.push(0);
-  const columnNum = colAndCardIndex.length - 1;
-  const defaultCard = createCard(columnNum, isFirstClomun, isFirstClomun);
+  colAndRowIndex.push(0);
+  const columnIndex = colAndRowIndex.length - 1;
+
+  const defaultCard = createCard(columnIndex, isFirstClomun);
   column.appendChild(title);
   column.appendChild(defaultCard);
+
   return column;
 }
 
-function createCard(columnNum, isFirstClomun) {
+function createCard(columnIndex, isFirstClomun) {
   const card = document.createElement("article");
   card.classList.add("card");
+<<<<<<< HEAD
   const cardIndex = colAndCardIndex[columnNum]++;
   const surppotrLanguageList = createListBySurpportLanguageOfTranslator(
     SUPPORT_LANGUAGE,
@@ -140,11 +143,31 @@ function createCard(columnNum, isFirstClomun) {
 =======
   card.appendChild(textarea);
 >>>>>>> 74dc787... eventListener-restAPI() 연결 성공
+=======
+  const rowIndex = colAndRowIndex[columnIndex]++;
+  const menuDIV = createMenuBar(columnIndex, rowIndex);
+  const navDiv = createNavbar(columnIndex, rowIndex, isFirstClomun);
+  const textarea = createTextarea(columnIndex, rowIndex, isFirstClomun);
+  card.appendChild(menuDIV);
+  card.appendChild(navDiv);
+  card.appendChild(textarea);
+  // if(){
+
+  // }
+  if (!isFirstClomun) {
+    //일단 동작 테스트를 위해 임시로 col-1을 부모로 지정
+    const parent = [columnIndex - 1, rowIndex];
+    const child = [columnIndex, rowIndex];
+    setParent(parentOfCard, parent, child);
+    setChild(childOfCard, parent, child);
+  }
+>>>>>>> d5fd0b1... 너무 많이 바꿨는데 커밋을 안 함;;. restAPI 호출할 때 부모가 있는지, 자식이 있는지에 따라 처리하도록 함, 번역기 바꾸면 바로 restAPI 호출하도록 함
   return card;
 }
 function createListBySurpportLanguageOfTranslator(
   supporedLanguae,
   columnIndex,
+<<<<<<< HEAD
 <<<<<<< HEAD
   rowIndex
 ) {
@@ -335,19 +358,22 @@ function createFooter(columnIndex, rowIndex) {
 }
 =======
   cardIndex
+=======
+  rowIndex
+>>>>>>> d5fd0b1... 너무 많이 바꿨는데 커밋을 안 함;;. restAPI 호출할 때 부모가 있는지, 자식이 있는지에 따라 처리하도록 함, 번역기 바꾸면 바로 restAPI 호출하도록 함
 ) {
   const surppotrLanguageListDIV = document.createElement("div");
   surppotrLanguageListDIV.classList.add("language-select", "flex");
   const ul = document.createElement("ul");
   ul.classList.add("flex");
   let radio_count = 0;
-  SUPPORT_LANGUAGE.forEach((lan) => {
+  supporedLanguae.forEach((lan) => {
     const li = document.createElement("li");
     const input = document.createElement("input");
-    const radioIndex = `radio-${columnIndex}-${cardIndex}-${radio_count++}`;
+    const radioIndex = `radio-${columnIndex}-${rowIndex}-${radio_count++}`;
     input.setAttribute("type", "radio");
     input.setAttribute("id", radioIndex);
-    input.setAttribute("name", `radio-${columnIndex}-${cardIndex}`);
+    input.setAttribute("name", `radio-${columnIndex}-${rowIndex}`);
     input.setAttribute("value", lan);
     if (columnIndex === 0) {
       if (lan === "한국어") {
@@ -370,35 +396,90 @@ function createFooter(columnIndex, rowIndex) {
 
   return surppotrLanguageListDIV;
 }
+function createMenuBar(columnIndex, rowIndex) {
+  const menuDIV = document.createElement("div");
+  menuDIV.classList.add("card-menu", "flex");
+  menuDIV.setAttribute("id", `menu-${columnIndex}-${rowIndex}`);
+  const minimizeSapn = document.createElement("span");
+  minimizeSapn.classList.add("minimize");
+  minimizeSapn.innerHTML = "최소화";
+  const closeSapn = document.createElement("span");
+  closeSapn.classList.add("close");
+  closeSapn.innerHTML = "닫기";
 
-function createTextarea(columnNum, cardIndex, isFirstClomun) {
-  const textarea = document.createElement("textarea");
-  textarea.setAttribute("id", `textarea-${columnNum}-${cardIndex}`);
-  if (isFirstClomun) {
-    textarea.addEventListener("change", () => {
-      restAPI(columnNum, cardIndex);
-    });
-  }
-  return textarea;
+  menuDIV.appendChild(minimizeSapn);
+  menuDIV.appendChild(closeSapn);
+  return menuDIV;
 }
-function createSelectorOfTranslatorType(columnNum, cardIndex, isFirstClomun) {
+
+function createNavbar(columnIndex, rowIndex, isFirstClomun) {
+  const navDIV = document.createElement("div");
+  navDIV.classList.add("card-nav");
+  const engineSelectorDIV = document.createElement("div");
+  engineSelectorDIV.classList.add("engine-select", "flex");
+
+  const selector = createSelectorOfTranslatorType(
+    columnIndex,
+    rowIndex,
+    isFirstClomun
+  );
+  const surppotrLanguageList = createListBySurpportLanguageOfTranslator(
+    SUPPORT_LANGUAGE,
+    columnIndex,
+    rowIndex
+  );
+  if (!isFirstClomun) {
+    engineSelectorDIV.innerHTML = `
+    <div>ㅁ</div>
+    <div>google</div>
+  `;
+    engineSelectorDIV.appendChild(selector);
+    navDIV.appendChild(engineSelectorDIV);
+  }
+
+  navDIV.appendChild(surppotrLanguageList);
+  return navDIV;
+}
+
+function createSelectorOfTranslatorType(columnIndex, rowIndex, isFirstClomun) {
   if (!isFirstClomun) {
     const selector = document.createElement("select");
-    selector.setAttribute("id", `selector-${columnNum}-${cardIndex}`);
+    selector.setAttribute("id", `selector-${columnIndex}-${rowIndex}`);
     selector.innerHTML = `<option value="google">구글</option>
     <option value="papago">파파고</option>
     <option value="kakao">카카오</option>`;
+    selector.addEventListener("change", () => {
+      restAPI(columnIndex, rowIndex, parentOfCard, childOfCard);
+    });
     return selector;
+  } else {
+    return "error";
   }
 }
 
+<<<<<<< HEAD
 >>>>>>> b950032... type=module시 main.js가 인식되지 않는 이유??
+=======
+function createTextarea(columnIndex, rowIndex, isFirstClomun) {
+  const textarea = document.createElement("textarea");
+  textarea.setAttribute("id", `textarea-${columnIndex}-${rowIndex}`);
+  textarea.addEventListener("change", () => {
+    restAPI(columnIndex, rowIndex, parentOfCard, childOfCard);
+  });
+  textarea.classList.add("textarea");
+  return textarea;
+}
+
+>>>>>>> d5fd0b1... 너무 많이 바꿨는데 커밋을 안 함;;. restAPI 호출할 때 부모가 있는지, 자식이 있는지에 따라 처리하도록 함, 번역기 바꾸면 바로 restAPI 호출하도록 함
 function setDefault() {
   board.appendChild(createColumn(true));
   board.appendChild(createColumn());
 }
 
 <<<<<<< HEAD
+<<<<<<< HEAD
+=======
+>>>>>>> d5fd0b1... 너무 많이 바꿨는데 커밋을 안 함;;. restAPI 호출할 때 부모가 있는지, 자식이 있는지에 따라 처리하도록 함, 번역기 바꾸면 바로 restAPI 호출하도록 함
 function setParent(parentOfCard, parent, child) {
   const [childCol, childRow] = child;
   if (parentOfCard.length <= childCol) {
@@ -418,8 +499,11 @@ function setChild(childOfCard, parent, child) {
   childOfCard[parentCol][parentRow].push(child);
 }
 
+<<<<<<< HEAD
 =======
 >>>>>>> b950032... type=module시 main.js가 인식되지 않는 이유??
+=======
+>>>>>>> d5fd0b1... 너무 많이 바꿨는데 커밋을 안 함;;. restAPI 호출할 때 부모가 있는지, 자식이 있는지에 따라 처리하도록 함, 번역기 바꾸면 바로 restAPI 호출하도록 함
 //test function
 
 const btnTest = document.getElementById("btnTest");
@@ -443,7 +527,12 @@ window.parent = [1, 1];
 
 document.addEventListener("DOMContentLoaded", setDefault());
 <<<<<<< HEAD
+<<<<<<< HEAD
 >>>>>>> 74dc787... eventListener-restAPI() 연결 성공
 =======
 console.log(colAndCardIndex);
 >>>>>>> db23f02... 구글, 파파고, 카카오에 따른 표기법 처리
+=======
+
+window.parent = [1, 1];
+>>>>>>> d5fd0b1... 너무 많이 바꿨는데 커밋을 안 함;;. restAPI 호출할 때 부모가 있는지, 자식이 있는지에 따라 처리하도록 함, 번역기 바꾸면 바로 restAPI 호출하도록 함
