@@ -9,10 +9,10 @@ const SUPPORT_LANGUAGE = [
   "독일어",
 ];
 
-//defaul
-//이 배열의 index는 column의 넘버, 그 index의 값은 card의 갯수로 인지한다
+const colAndRowIndex = [];
+const parentOfCard = [[["no parent"]]];
+const childOfCard = [];
 
-const colAndCardIndex = [];
 const board = document.getElementById("board");
 
 function createColumn(isFirstClomun = false) {
@@ -20,68 +20,55 @@ function createColumn(isFirstClomun = false) {
   column.classList.add("column");
   const title = document.createElement("h2");
   title.innerHTML = "입력";
-  colAndCardIndex.push(0);
-  const columnNum = colAndCardIndex.length - 1;
-  const defaultCard = createCard(columnNum, isFirstClomun, isFirstClomun);
+  colAndRowIndex.push(0);
+  const columnIndex = colAndRowIndex.length - 1;
+
+  const defaultCard = createCard(columnIndex, isFirstClomun);
   column.appendChild(title);
   column.appendChild(defaultCard);
+
   return column;
 }
 
-function createCard(columnNum, isFirstClomun) {
+function createCard(columnIndex, isFirstClomun) {
   const card = document.createElement("article");
   card.classList.add("card");
-  const cardIndex = colAndCardIndex[columnNum]++;
-  const surppotrLanguageList = createListBySurpportLanguageOfTranslator(
-    SUPPORT_LANGUAGE,
-    columnNum,
-    cardIndex
-  );
-  const selector = createSelectorOfTranslatorType(
-    columnNum,
-    cardIndex,
-    isFirstClomun
-  );
-  const textarea = createTextarea(columnNum, cardIndex, isFirstClomun);
-  card.innerHTML = `
-    <div class="card-menu flex">
-      <span>최소화</span>
-      <span>닫기</span>
-    </div>
-    <div class="card-nav">
-      ${
-        isFirstClomun
-          ? surppotrLanguageList.outerHTML
-          : `<div class="engine-select flex">
-          <div>ㅁ</div>
-          <div>google</div>
-          ${selector.outerHTML}
-        </div>
-      ${surppotrLanguageList.outerHTML}
-        `
-      }
-    </div>
-  `;
+  const rowIndex = colAndRowIndex[columnIndex]++;
+  const menuDIV = createMenuBar(columnIndex, rowIndex);
+  const navDiv = createNavbar(columnIndex, rowIndex, isFirstClomun);
+  const textarea = createTextarea(columnIndex, rowIndex, isFirstClomun);
+  card.appendChild(menuDIV);
+  card.appendChild(navDiv);
   card.appendChild(textarea);
+  // if(){
+
+  // }
+  if (!isFirstClomun) {
+    //일단 동작 테스트를 위해 임시로 col-1을 부모로 지정
+    const parent = [columnIndex - 1, rowIndex];
+    const child = [columnIndex, rowIndex];
+    setParent(parentOfCard, parent, child);
+    setChild(childOfCard, parent, child);
+  }
   return card;
 }
 function createListBySurpportLanguageOfTranslator(
   supporedLanguae,
   columnIndex,
-  cardIndex
+  rowIndex
 ) {
   const surppotrLanguageListDIV = document.createElement("div");
   surppotrLanguageListDIV.classList.add("language-select", "flex");
   const ul = document.createElement("ul");
   ul.classList.add("flex");
   let radio_count = 0;
-  SUPPORT_LANGUAGE.forEach((lan) => {
+  supporedLanguae.forEach((lan) => {
     const li = document.createElement("li");
     const input = document.createElement("input");
-    const radioIndex = `radio-${columnIndex}-${cardIndex}-${radio_count++}`;
+    const radioIndex = `radio-${columnIndex}-${rowIndex}-${radio_count++}`;
     input.setAttribute("type", "radio");
     input.setAttribute("id", radioIndex);
-    input.setAttribute("name", `radio-${columnIndex}-${cardIndex}`);
+    input.setAttribute("name", `radio-${columnIndex}-${rowIndex}`);
     input.setAttribute("value", lan);
     if (columnIndex === 0) {
       if (lan === "한국어") {
@@ -104,31 +91,99 @@ function createListBySurpportLanguageOfTranslator(
 
   return surppotrLanguageListDIV;
 }
+function createMenuBar(columnIndex, rowIndex) {
+  const menuDIV = document.createElement("div");
+  menuDIV.classList.add("card-menu", "flex");
+  menuDIV.setAttribute("id", `menu-${columnIndex}-${rowIndex}`);
+  const minimizeSapn = document.createElement("span");
+  minimizeSapn.classList.add("minimize");
+  minimizeSapn.innerHTML = "최소화";
+  const closeSapn = document.createElement("span");
+  closeSapn.classList.add("close");
+  closeSapn.innerHTML = "닫기";
 
-function createTextarea(columnNum, cardIndex, isFirstClomun) {
-  const textarea = document.createElement("textarea");
-  textarea.setAttribute("id", `textarea-${columnNum}-${cardIndex}`);
-  if (isFirstClomun) {
-    textarea.addEventListener("change", () => {
-      restAPI(columnNum, cardIndex);
-    });
-  }
-  return textarea;
+  menuDIV.appendChild(minimizeSapn);
+  menuDIV.appendChild(closeSapn);
+  return menuDIV;
 }
-function createSelectorOfTranslatorType(columnNum, cardIndex, isFirstClomun) {
+
+function createNavbar(columnIndex, rowIndex, isFirstClomun) {
+  const navDIV = document.createElement("div");
+  navDIV.classList.add("card-nav");
+  const engineSelectorDIV = document.createElement("div");
+  engineSelectorDIV.classList.add("engine-select", "flex");
+
+  const selector = createSelectorOfTranslatorType(
+    columnIndex,
+    rowIndex,
+    isFirstClomun
+  );
+  const surppotrLanguageList = createListBySurpportLanguageOfTranslator(
+    SUPPORT_LANGUAGE,
+    columnIndex,
+    rowIndex
+  );
+  if (!isFirstClomun) {
+    engineSelectorDIV.innerHTML = `
+    <div>ㅁ</div>
+    <div>google</div>
+  `;
+    engineSelectorDIV.appendChild(selector);
+    navDIV.appendChild(engineSelectorDIV);
+  }
+
+  navDIV.appendChild(surppotrLanguageList);
+  return navDIV;
+}
+
+function createSelectorOfTranslatorType(columnIndex, rowIndex, isFirstClomun) {
   if (!isFirstClomun) {
     const selector = document.createElement("select");
-    selector.setAttribute("id", `selector-${columnNum}-${cardIndex}`);
+    selector.setAttribute("id", `selector-${columnIndex}-${rowIndex}`);
     selector.innerHTML = `<option value="google">구글</option>
     <option value="papago">파파고</option>
     <option value="kakao">카카오</option>`;
+    selector.addEventListener("change", () => {
+      restAPI(columnIndex, rowIndex, parentOfCard, childOfCard);
+    });
     return selector;
+  } else {
+    return "error";
   }
+}
+
+function createTextarea(columnIndex, rowIndex, isFirstClomun) {
+  const textarea = document.createElement("textarea");
+  textarea.setAttribute("id", `textarea-${columnIndex}-${rowIndex}`);
+  textarea.addEventListener("change", () => {
+    restAPI(columnIndex, rowIndex, parentOfCard, childOfCard);
+  });
+  textarea.classList.add("textarea");
+  return textarea;
 }
 
 function setDefault() {
   board.appendChild(createColumn(true));
   board.appendChild(createColumn());
+}
+
+function setParent(parentOfCard, parent, child) {
+  const [childCol, childRow] = child;
+  if (parentOfCard.length <= childCol) {
+    parentOfCard.push([]);
+  }
+  parentOfCard[childCol].splice(childRow, 1, parent);
+}
+
+function setChild(childOfCard, parent, child) {
+  const [parentCol, parentRow] = parent;
+  if (childOfCard.length <= parentCol) {
+    childOfCard.push([]);
+  }
+  if (childOfCard[parentCol].length <= parentRow) {
+    childOfCard[parentCol].push([]);
+  }
+  childOfCard[parentCol][parentRow].push(child);
 }
 
 //test function
@@ -139,4 +194,5 @@ btnTest.addEventListener("click", () => {
 });
 
 document.addEventListener("DOMContentLoaded", setDefault());
-console.log(colAndCardIndex);
+
+window.parent = [1, 1];

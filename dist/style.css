@@ -82,3 +82,8 @@ nav > ul > li + li {
 .column > .card > .card-nav > .language-select li + li {
   margin-left: 10px;
 }
+
+.textarea {
+  width: 100%;
+  height: 300px;
+}
