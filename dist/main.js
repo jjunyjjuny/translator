@@ -384,6 +384,9 @@ function createFooter(columnIndex, rowIndex) {
         input.setAttribute("checked", "checked");
       }
     }
+    input.addEventListener("click", () => {
+      restAPI(columnIndex, rowIndex, parentOfCard, childOfCard);
+    });
 
     const label = document.createElement("label");
     label.setAttribute("for", radioIndex);
