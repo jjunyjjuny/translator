@@ -6,54 +6,55 @@ body {
   display: flex;
 }
 .wrap {
-  justify-content: center;
+  background: #e5e5e5;
   position: relative;
   height: 100%;
 }
 
-.side_note {
-  position: absolute;
-  left: 0;
-  height: 100%;
-}
 .container {
-  display: inline-block;
   margin: 0 auto;
-
-  margin: 0 auto;
+  justify-content: center;
+  padding: 60px 0;
 }
 header {
+  background: white;
   height: 100px;
-  font-size: 20px;
+  padding: 30px 70px;
+  box-shadow: 0px 3px 8px rgb(185, 185, 185);
 }
-nav {
-  height: 50px;
+header nav {
 }
-
-nav > ul > li + li {
+header > nav > ul {
+  font-size: 18px;
+}
+header > nav > ul > li + li {
   margin-left: 15px;
+  height: 25px;
+}
+header > p {
+  font-size: 13px;
+  padding: 10px 0;
 }
 #board {
-  justify-content: space-around;
+  /* justify-content: space-around; */
 }
 
-.column {
-  width: 300px;
-  height: 500px;
-}
 .column + .column {
   margin-left: 100px;
 }
-.column > h2 {
-}
+
 .column > .card {
+  background: white;
 }
 .column > .card > .card-menu {
   justify-content: flex-end;
+  background: #e5e5e5;
+  padding: 10px;
 }
-.column > .card > .card-nav {
+.column > .card > .card-menu span + span {
+  margin-left: 10px;
 }
-.column > .card > .card-nav > .engine-select {
+.column > .card > .card-contents {
 }
 .column > .card > .card-nav > .language-select input[type="radio"] {
   overflow: hidden;

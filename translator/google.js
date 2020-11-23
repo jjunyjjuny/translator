@@ -3,12 +3,12 @@ const { Translate } = require("@google-cloud/translate").v2;
 require("dotenv").config();
 
 // Your credentials
-const CREDENTIALS_GOOGLE = JSON.parse(process.env.CREDENTIALS_GOOGLE);
+const CREDENTIALS = JSON.parse(process.env.CREDENTIALS);
 
 // Configuration for the client
 const translate = new Translate({
-  credentials: CREDENTIALS_GOOGLE,
-  projectId: CREDENTIALS_GOOGLE.project_id,
+  credentials: CREDENTIALS,
+  projectId: CREDENTIALS.project_id,
 });
 
 module.exports.detectLanguage = async (text) => {
@@ -21,9 +21,9 @@ module.exports.detectLanguage = async (text) => {
   }
 };
 
-module.exports.googleTranslator = async (query, targetLanguage) => {
+module.exports.googleTranslator = async (text, targetLanguage) => {
   try {
-    let [response] = await translate.translate(query, targetLanguage);
+    let [response] = await translate.translate(text, targetLanguage);
     console.log("response : ", response);
     return response;
   } catch (error) {

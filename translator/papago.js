@@ -7,10 +7,10 @@ module.exports.papagoTranslator = async (query, source, targetLanguage) => {
   const api_url = "https://openapi.naver.com/v1/papago/n2mt";
   const options = {
     url: api_url,
-    form: { text: query, source: source, target: targetLanguage },
+    form: { text: query, source: source, target: target },
     headers: {
-      "X-Naver-Client-Id": CREDENTIALS_PAPAGO.client_id,
-      "X-Naver-Client-Secret": CREDENTIALS_PAPAGO.client_secret,
+      "X-Naver-Client-Id": client_id,
+      "X-Naver-Client-Secret": client_secret,
     },
   };
   try {
