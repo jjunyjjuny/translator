@@ -10,7 +10,11 @@ body {
   flex-direction: column;
 }
 .wrap {
+<<<<<<< HEAD
   background: #f1f1f1;
+=======
+  background: #e5e5e5;
+>>>>>>> c4a63c8... .env github 노출 commit revert
   position: relative;
   height: 100%;
 }
@@ -19,6 +23,7 @@ body {
   margin: 0 auto;
   justify-content: center;
   padding: 60px 0;
+<<<<<<< HEAD
 }
 .dropdown {
   cursor: pointer;
@@ -36,6 +41,8 @@ body {
   display: none;
   position: absolute;
   z-index: 1;
+=======
+>>>>>>> c4a63c8... .env github 노출 commit revert
 }
 .show {
   display: block;
@@ -67,6 +74,7 @@ header > p {
 .column + .column {
   margin-left: 100px;
 }
+<<<<<<< HEAD
 .cardList {
   display: flex;
   flex-direction: column;
@@ -76,10 +84,16 @@ header > p {
 
 .cardList > .card + .card {
   margin-top: 32px;
+=======
+
+.column > .card {
+  background: white;
+>>>>>>> c4a63c8... .env github 노출 commit revert
 }
 
 .card > .card-menu {
   justify-content: flex-end;
+<<<<<<< HEAD
   background: #f1f1f1;
   padding: 10px;
 }
@@ -90,6 +104,15 @@ header > p {
   background: white;
   border-radius: 5px;
   box-shadow: 0px 0px 7px #949494;
+=======
+  background: #e5e5e5;
+  padding: 10px;
+}
+.column > .card > .card-menu span + span {
+  margin-left: 10px;
+}
+.column > .card > .card-contents {
+>>>>>>> c4a63c8... .env github 노출 commit revert
 }
 .card-contents > .card-nav {
   border-bottom: 1px solid #c4c4c4;

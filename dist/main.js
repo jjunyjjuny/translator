@@ -91,13 +91,13 @@ const board = document.getElementById("board");
 function createColumn(isFirstClomun = false) {
   const column = document.createElement("article");
   column.classList.add("column");
-  const title = document.createElement("h2");
-  title.innerHTML = "입력";
+  // const title = document.createElement("h2");
+  // title.innerHTML = "입력";
   colAndRowIndex.push(0);
   const columnIndex = colAndRowIndex.length - 1;
 
   const defaultCard = createCard(columnIndex, isFirstClomun);
-  column.appendChild(title);
+  // column.appendChild(title);
   column.appendChild(defaultCard);
 
   return column;
@@ -106,6 +106,7 @@ function createColumn(isFirstClomun = false) {
 function createCard(columnIndex, isFirstClomun) {
   const card = document.createElement("article");
   card.classList.add("card");
+<<<<<<< HEAD
 <<<<<<< HEAD
   const cardIndex = colAndCardIndex[columnNum]++;
   const surppotrLanguageList = createListBySurpportLanguageOfTranslator(
@@ -144,16 +145,22 @@ function createCard(columnIndex, isFirstClomun) {
   card.appendChild(textarea);
 >>>>>>> 74dc787... eventListener-restAPI() 연결 성공
 =======
+=======
+
+  const cardContents = document.createElement("div");
+  cardContents.classList.add("card-contents");
+>>>>>>> c4a63c8... .env github 노출 commit revert
   const rowIndex = colAndRowIndex[columnIndex]++;
-  const menuDIV = createMenuBar(columnIndex, rowIndex);
   const navDiv = createNavbar(columnIndex, rowIndex, isFirstClomun);
   const textarea = createTextarea(columnIndex, rowIndex, isFirstClomun);
+  const menuDIV = createMenuBar(columnIndex, rowIndex);
   card.appendChild(menuDIV);
-  card.appendChild(navDiv);
-  card.appendChild(textarea);
-  // if(){
 
-  // }
+  cardContents.appendChild(navDiv);
+  cardContents.appendChild(textarea);
+
+  card.appendChild(cardContents);
+
   if (!isFirstClomun) {
     //일단 동작 테스트를 위해 임시로 col-1을 부모로 지정
     const parent = [columnIndex - 1, rowIndex];
@@ -215,6 +222,7 @@ function createMenuBar(columnIndex, rowIndex) {
   const minimizeSapn = document.createElement("span");
   minimizeSapn.classList.add("minimize");
   minimizeSapn.innerHTML = "ㅡ";
+<<<<<<< HEAD
   const closeSapn = document.createElement("span");
   closeSapn.classList.add("close");
   closeSapn.innerHTML = "X";
@@ -406,9 +414,11 @@ function createMenuBar(columnIndex, rowIndex) {
   const minimizeSapn = document.createElement("span");
   minimizeSapn.classList.add("minimize");
   minimizeSapn.innerHTML = "최소화";
+=======
+>>>>>>> c4a63c8... .env github 노출 commit revert
   const closeSapn = document.createElement("span");
   closeSapn.classList.add("close");
-  closeSapn.innerHTML = "닫기";
+  closeSapn.innerHTML = "X";
 
   menuDIV.appendChild(minimizeSapn);
   menuDIV.appendChild(closeSapn);
