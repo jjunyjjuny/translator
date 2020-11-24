@@ -31,6 +31,7 @@ app.post("/translate", async (req, res) => {
     source: req.body.source,
   };
   let translation = "";
+  console.log(response.type);
   switch (response.type) {
     case "google":
       translation = await googleTranslator(response.text, response.target);

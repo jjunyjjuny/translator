@@ -140,7 +140,7 @@ function getTypeOfTranslator(child) {
   const typeOfTranslator = document.querySelector(
     `#selector-${childCol}-${childRow}`
   );
-  return typeOfTranslator.value;
+  return typeOfTranslator.dataset.type;
 }
 function getTargetLanguage(target, typeOfTranslator) {
   const [targetCol, targetRow] = target;
@@ -158,7 +158,6 @@ function getTargetLanguage(target, typeOfTranslator) {
       break;
     case "kakao":
       targetLanguageNotation = KAKAO_SUPPORT_LANGUAGE[targetLanguage];
-      console.log(targetLanguageNotation);
       break;
   }
   return targetLanguageNotation;
