@@ -3,8 +3,8 @@ import { restAPI } from "./restApi.js";
 const SUPPORT_LANGUAGE = [
   "한국어",
   "영어",
-  "일본어",
   "중국어(간체)",
+  "일본어",
   "중국어(번체)",
   "독일어",
 ];
@@ -23,27 +23,39 @@ function createColumn(isFirstClomun = false) {
   colAndRowIndex.push(0);
   const columnIndex = colAndRowIndex.length - 1;
 
+  const cardList = document.createElement("div");
+  cardList.classList.add("cardList");
+
   const defaultCard = createCard(columnIndex, isFirstClomun);
-  // column.appendChild(title);
-  column.appendChild(defaultCard);
+  cardList.appendChild(defaultCard);
+
+  column.appendChild(cardList);
+
+  const btn_addCardToCardList = document.createElement("button");
 
   return column;
 }
 
 function createCard(columnIndex, isFirstClomun) {
+  const rowIndex = colAndRowIndex[columnIndex]++;
+
   const card = document.createElement("article");
   card.classList.add("card");
 
-  const cardContents = document.createElement("div");
-  cardContents.classList.add("card-contents");
-  const rowIndex = colAndRowIndex[columnIndex]++;
-  const navDiv = createNavbar(columnIndex, rowIndex, isFirstClomun);
-  const textarea = createTextarea(columnIndex, rowIndex, isFirstClomun);
   const menuDIV = createMenuBar(columnIndex, rowIndex);
   card.appendChild(menuDIV);
 
+  const cardContents = document.createElement("div");
+  cardContents.classList.add("card-contents");
+
+  const navDiv = createNavbar(columnIndex, rowIndex, isFirstClomun);
   cardContents.appendChild(navDiv);
+
+  const textarea = createTextarea(columnIndex, rowIndex);
   cardContents.appendChild(textarea);
+
+  const footer = createFooter(columnIndex, rowIndex);
+  cardContents.appendChild(footer);
 
   card.appendChild(cardContents);
 
@@ -116,11 +128,9 @@ function createMenuBar(columnIndex, rowIndex) {
 
 function createNavbar(columnIndex, rowIndex, isFirstClomun) {
   const navDIV = document.createElement("div");
-  navDIV.classList.add("card-nav");
-  const engineSelectorDIV = document.createElement("div");
-  engineSelectorDIV.classList.add("engine-select", "flex");
+  navDIV.classList.add("card-nav", "flex");
 
-  const selector = createSelectorOfTranslatorType(
+  const selector = createSelectorOfTranslatorType2(
     columnIndex,
     rowIndex,
     isFirstClomun
@@ -131,12 +141,7 @@ function createNavbar(columnIndex, rowIndex, isFirstClomun) {
     rowIndex
   );
   if (!isFirstClomun) {
-    engineSelectorDIV.innerHTML = `
-    <div>ㅁ</div>
-    <div>google</div>
-  `;
-    engineSelectorDIV.appendChild(selector);
-    navDIV.appendChild(engineSelectorDIV);
+    navDIV.appendChild(selector);
   }
 
   navDIV.appendChild(surppotrLanguageList);
@@ -158,17 +163,101 @@ function createSelectorOfTranslatorType(columnIndex, rowIndex, isFirstClomun) {
     return "error";
   }
 }
+function createSelectorOfTranslatorType2(columnIndex, rowIndex, isFirstClomun) {
+  if (!isFirstClomun) {
+    const selectorDIV = document.createElement("div");
+    selectorDIV.classList.add("card-selectorBox", "dropdown", "flex-vertical");
 
-function createTextarea(columnIndex, rowIndex, isFirstClomun) {
+    const selectedBox = document.createElement("div");
+    selectedBox.classList.add("card-selectedBox", "btn_dropdown", "flex");
+    selectedBox.addEventListener("click", () => {
+      selectorList.classList.toggle("show");
+    });
+
+    const selectedTranslatorType = document.createElement("img");
+    selectedTranslatorType.setAttribute(
+      "id",
+      `selector-${columnIndex}-${rowIndex}`
+    );
+    selectedTranslatorType.setAttribute("src", "./src/img_google.png");
+    selectedTranslatorType.setAttribute("data-type", "google");
+
+    const btn_toggle = document.createElement("img");
+    btn_toggle.setAttribute("src", "./src/btn_toggle.png");
+
+    selectedBox.appendChild(selectedTranslatorType);
+    selectedBox.appendChild(btn_toggle);
+
+    selectorDIV.appendChild(selectedBox);
+
+    const list = ["google", "papago", "kakao"];
+    const dropdownBox = document.createElement("div");
+    dropdownBox.classList.add("dropdownBox");
+
+    const selectorList = document.createElement("ul");
+    selectorList.classList.add("dropdown-content");
+    list.forEach((type) => {
+      const li = document.createElement("li");
+      const img = document.createElement("img");
+      img.setAttribute("src", `./src/img_${type}.png`);
+      img.setAttribute("data-type", `${type}`);
+      img.addEventListener("click", () => {
+        selectedTranslatorType.setAttribute("src", `./src/img_${type}.png`);
+        selectedTranslatorType.setAttribute("data-type", `${type}`);
+        selectorList.classList.remove("show");
+        restAPI(columnIndex, rowIndex, parentOfCard, childOfCard);
+      });
+      li.appendChild(img);
+      selectorList.appendChild(li);
+    });
+    dropdownBox.appendChild(selectorList);
+    selectorDIV.appendChild(dropdownBox);
+
+    return selectorDIV;
+  } else {
+    return "error";
+  }
+}
+
+function createTextarea(columnIndex, rowIndex) {
+  const textareaDIV = document.createElement("div");
+  textareaDIV.classList.add("card-textareaBox");
+
   const textarea = document.createElement("textarea");
   textarea.setAttribute("id", `textarea-${columnIndex}-${rowIndex}`);
   textarea.addEventListener("change", () => {
     restAPI(columnIndex, rowIndex, parentOfCard, childOfCard);
   });
-  textarea.classList.add("textarea");
-  return textarea;
+  textarea.classList.add("card-textarea");
+  textareaDIV.appendChild(textarea);
+  return textareaDIV;
 }
 
+function createFooter(columnIndex, rowIndex) {
+  const footerDIV = document.createElement("div");
+  footerDIV.classList.add("flex", "card-footer");
+
+  const textCount = document.createElement("div");
+  textCount.classList.add("card-textCount");
+  textCount.innerText = "0 / 5000";
+
+  const btn_CreateChildCard = document.createElement("div");
+  const img_btnOfCreateChildCard = document.createElement("img");
+  img_btnOfCreateChildCard.setAttribute(
+    "src",
+    "./src/btn_create_child_card.png"
+  );
+  btn_CreateChildCard.appendChild(img_btnOfCreateChildCard);
+
+  //자식 칼럼 있으면 or 없으면에 따라 다르게 구분
+  // img_btnOfCreateChildCard.addEventListener("click", () => {
+  //   restAPI(columnIndex, rowIndex, parentOfCard, childOfCard);
+  // });
+
+  footerDIV.appendChild(textCount);
+  footerDIV.appendChild(btn_CreateChildCard);
+  return footerDIV;
+}
 function setDefault() {
   board.appendChild(createColumn(true));
   board.appendChild(createColumn());

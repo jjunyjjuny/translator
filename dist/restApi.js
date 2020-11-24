@@ -140,7 +140,9 @@ function getTypeOfTranslator(child) {
   const typeOfTranslator = document.querySelector(
     `#selector-${childCol}-${childRow}`
   );
-  return typeOfTranslator.value;
+  console.log("typeOfTranslator :", typeOfTranslator);
+  console.log("type :", typeOfTranslator.dataset.type);
+  return typeOfTranslator.dataset.type;
 }
 function getTargetLanguage(target, typeOfTranslator) {
   const [targetCol, targetRow] = target;
