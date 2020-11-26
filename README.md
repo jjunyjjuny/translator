@@ -1,4 +1,4 @@
-# [홍송남 번역기](https://jjuny-translator.herokuapp.com/)
+## 홍송남 번역기
 
  구글, 파파고, 카카오톡 번역 API를 활용한 다중 번역 사이트.
 
