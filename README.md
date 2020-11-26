@@ -15,3 +15,7 @@
 - Javascript
 - Node.js
 - Google, Papago, Kakao translate API
+
+### Goals
+
+바닐라 JS로 일단 기능을 모두 구현하고, 리팩토링 한 후에 React로 다시 만들어보면서 연습하기.
