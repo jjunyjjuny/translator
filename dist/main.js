@@ -23,15 +23,15 @@ function createColumn(isFirstClomun = false) {
   const columnIndex = colAndRowIndex.length - 1;
 
   const cardList = document.createElement("div");
+  cardList.setAttribute("id", `cardList-${columnIndex}`);
   cardList.classList.add("cardList");
 
-  const defaultCard = createCard(columnIndex, isFirstClomun);
-  cardList.appendChild(defaultCard);
+  // const defaultCard = createCard(columnIndex, isFirstClomun);
+  // cardList.appendChild(defaultCard);
 
   column.appendChild(cardList);
 
   const btn_addCardToCardList = createButtonOfCreateCard(
-    cardList,
     columnIndex,
     isFirstClomun
   );
@@ -40,7 +40,7 @@ function createColumn(isFirstClomun = false) {
   return column;
 }
 
-function createCard(columnIndex, isFirstClomun) {
+function createCard(columnIndex, isFirstClomun = false) {
   const rowIndex = colAndRowIndex[columnIndex]++;
 
   const card = document.createElement("article");
@@ -70,7 +70,9 @@ function createCard(columnIndex, isFirstClomun) {
     setParent(parentOfCard, parent, child);
     setChild(childOfCard, parent, child);
   }
-  return card;
+
+  const cardList = document.getElementById(`cardList-${columnIndex}`);
+  cardList.appendChild(card);
 }
 function createListBySurpportLanguageOfTranslator(
   supporedLanguae,
@@ -134,7 +136,7 @@ function createNavbar(columnIndex, rowIndex, isFirstClomun) {
   const navDIV = document.createElement("div");
   navDIV.classList.add("card-nav", "flex");
 
-  const selector = createSelectorOfTranslatorType2(
+  const selector = createSelectorOfTranslatorType(
     columnIndex,
     rowIndex,
     isFirstClomun
@@ -153,21 +155,6 @@ function createNavbar(columnIndex, rowIndex, isFirstClomun) {
 }
 
 function createSelectorOfTranslatorType(columnIndex, rowIndex, isFirstClomun) {
-  if (!isFirstClomun) {
-    const selector = document.createElement("select");
-    selector.setAttribute("id", `selector-${columnIndex}-${rowIndex}`);
-    selector.innerHTML = `<option value="google">구글</option>
-    <option value="papago">파파고</option>
-    <option value="kakao">카카오</option>`;
-    selector.addEventListener("change", () => {
-      restAPI(columnIndex, rowIndex, parentOfCard, childOfCard);
-    });
-    return selector;
-  } else {
-    return "error";
-  }
-}
-function createSelectorOfTranslatorType2(columnIndex, rowIndex, isFirstClomun) {
   if (!isFirstClomun) {
     const selectorDIV = document.createElement("div");
     selectorDIV.classList.add("card-selectorBox", "dropdown", "flex-vertical");
@@ -252,18 +239,17 @@ function createFooter(columnIndex, rowIndex) {
     "./src/btn_create_child_card.png"
   );
   btn_CreateChildCard.appendChild(img_btnOfCreateChildCard);
-
-  //자식 칼럼 있으면 or 없으면에 따라 다르게 구분
-  // img_btnOfCreateChildCard.addEventListener("click", () => {
-  //   restAPI(columnIndex, rowIndex, parentOfCard, childOfCard);
-  // });
+  btn_CreateChildCard.addEventListener("click", () => {
+    console.log(colAndRowIndex);
+    const childCard = createCard;
+  });
 
   footerDIV.appendChild(textCount);
   footerDIV.appendChild(btn_CreateChildCard);
   return footerDIV;
 }
 
-function createButtonOfCreateCard(cardList, columnIndex, isFirstClomun) {
+function createButtonOfCreateCard(columnIndex, isFirstClomun) {
   const button = document.createElement("button");
   button.classList.add("btn_CreateCard");
   button.innerText = "+";
@@ -271,14 +257,16 @@ function createButtonOfCreateCard(cardList, columnIndex, isFirstClomun) {
   button.addEventListener("click", () => {
     console.log("test");
     console.log();
-    cardList.appendChild(createCard(columnIndex, isFirstClomun));
+    createCard(columnIndex, isFirstClomun);
   });
   return button;
 }
 
 function setDefault() {
   board.appendChild(createColumn(true));
+  createCard(colAndRowIndex.length - 1, true);
   board.appendChild(createColumn());
+  createCard(colAndRowIndex.length - 1);
 }
 
 function setParent(parentOfCard, parent, child) {
