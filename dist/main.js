@@ -15,6 +15,7 @@ const childOfCard = [];
 const board = document.getElementById("board");
 
 function createColumn(isFirstClomun = false) {
+  console.log("create column");
   const column = document.createElement("article");
   column.classList.add("column");
   // const title = document.createElement("h2");
@@ -26,9 +27,6 @@ function createColumn(isFirstClomun = false) {
   cardList.setAttribute("id", `cardList-${columnIndex}`);
   cardList.classList.add("cardList");
 
-  // const defaultCard = createCard(columnIndex, isFirstClomun);
-  // cardList.appendChild(defaultCard);
-
   column.appendChild(cardList);
 
   const btn_addCardToCardList = createButtonOfCreateCard(
@@ -36,8 +34,7 @@ function createColumn(isFirstClomun = false) {
     isFirstClomun
   );
   column.appendChild(btn_addCardToCardList);
-
-  return column;
+  board.appendChild(column);
 }
 
 function createCard(columnIndex, isFirstClomun = false) {
@@ -240,10 +237,13 @@ function createFooter(columnIndex, rowIndex) {
   );
   btn_CreateChildCard.appendChild(img_btnOfCreateChildCard);
   btn_CreateChildCard.addEventListener("click", () => {
-    console.log(colAndRowIndex);
-    const childCard = createCard;
+    console.log(colAndRowIndex, columnIndex);
+    if (colAndRowIndex.length === columnIndex + 1) {
+      createColumn();
+    }
+    createCard(columnIndex + 1);
   });
-
+  
   footerDIV.appendChild(textCount);
   footerDIV.appendChild(btn_CreateChildCard);
   return footerDIV;
@@ -263,9 +263,9 @@ function createButtonOfCreateCard(columnIndex, isFirstClomun) {
 }
 
 function setDefault() {
-  board.appendChild(createColumn(true));
+  createColumn(true);
   createCard(colAndRowIndex.length - 1, true);
-  board.appendChild(createColumn());
+  createColumn();
   createCard(colAndRowIndex.length - 1);
 }
 
@@ -292,7 +292,7 @@ function setChild(childOfCard, parent, child) {
 
 const btnTest = document.getElementById("btnTest");
 btnTest.addEventListener("click", () => {
-  board.appendChild(createColumn());
+  createColumn();
 });
 
 document.addEventListener("DOMContentLoaded", setDefault());
