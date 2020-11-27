@@ -3,10 +3,9 @@ import { restAPI } from "./restApi.js";
 const SUPPORT_LANGUAGE = [
   "한국어",
   "영어",
-  "중국어(간체)",
   "일본어",
+  "중국어(간체)",
   "중국어(번체)",
-  "독일어",
 ];
 
 const colAndRowIndex = [];
@@ -31,7 +30,12 @@ function createColumn(isFirstClomun = false) {
 
   column.appendChild(cardList);
 
-  const btn_addCardToCardList = document.createElement("button");
+  const btn_addCardToCardList = createButtonOfCreateCard(
+    cardList,
+    columnIndex,
+    isFirstClomun
+  );
+  column.appendChild(btn_addCardToCardList);
 
   return column;
 }
@@ -258,6 +262,20 @@ function createFooter(columnIndex, rowIndex) {
   footerDIV.appendChild(btn_CreateChildCard);
   return footerDIV;
 }
+
+function createButtonOfCreateCard(cardList, columnIndex, isFirstClomun) {
+  const button = document.createElement("button");
+  button.classList.add("btn_CreateCard");
+  button.innerText = "+";
+
+  button.addEventListener("click", () => {
+    console.log("test");
+    console.log();
+    cardList.appendChild(createCard(columnIndex, isFirstClomun));
+  });
+  return button;
+}
+
 function setDefault() {
   board.appendChild(createColumn(true));
   board.appendChild(createColumn());
