@@ -9,13 +9,12 @@ const SUPPORT_LANGUAGE = [
 ];
 
 const colAndRowIndex = [];
-const parentOfCard = [[["no parent"]]];
+const parentOfCard = [[]];
 const childOfCard = [];
 
 const board = document.getElementById("board");
 
 function createColumn(isFirstClomun = false) {
-  console.log("create column");
   const column = document.createElement("article");
   column.classList.add("column");
   // const title = document.createElement("h2");
@@ -37,7 +36,7 @@ function createColumn(isFirstClomun = false) {
   board.appendChild(column);
 }
 
-function createCard(columnIndex, isFirstClomun = false) {
+function createCard(columnIndex, parent, isFirstClomun = false) {
   const rowIndex = colAndRowIndex[columnIndex]++;
 
   const card = document.createElement("article");
@@ -59,13 +58,15 @@ function createCard(columnIndex, isFirstClomun = false) {
   cardContents.appendChild(footer);
 
   card.appendChild(cardContents);
+  const myself = [columnIndex, rowIndex];
 
-  if (!isFirstClomun) {
-    //일단 동작 테스트를 위해 임시로 col-1을 부모로 지정
-    const parent = [columnIndex - 1, rowIndex];
-    const child = [columnIndex, rowIndex];
-    setParent(parentOfCard, parent, child);
-    setChild(childOfCard, parent, child);
+  setChild(childOfCard, myself, "none");
+
+  if (parent[0] === "none") {
+    setParent(parentOfCard, parent, myself);
+  } else {
+    setParent(parentOfCard, parent, myself);
+    setChild(childOfCard, parent, myself);
   }
 
   const cardList = document.getElementById(`cardList-${columnIndex}`);
@@ -237,13 +238,12 @@ function createFooter(columnIndex, rowIndex) {
   );
   btn_CreateChildCard.appendChild(img_btnOfCreateChildCard);
   btn_CreateChildCard.addEventListener("click", () => {
-    console.log(colAndRowIndex, columnIndex);
     if (colAndRowIndex.length === columnIndex + 1) {
       createColumn();
     }
-    createCard(columnIndex + 1);
+    createCard(columnIndex + 1, [columnIndex, rowIndex]);
   });
-  
+
   footerDIV.appendChild(textCount);
   footerDIV.appendChild(btn_CreateChildCard);
   return footerDIV;
@@ -255,18 +255,16 @@ function createButtonOfCreateCard(columnIndex, isFirstClomun) {
   button.innerText = "+";
 
   button.addEventListener("click", () => {
-    console.log("test");
-    console.log();
-    createCard(columnIndex, isFirstClomun);
+    createCard(columnIndex, ["none"], isFirstClomun);
   });
   return button;
 }
 
 function setDefault() {
   createColumn(true);
-  createCard(colAndRowIndex.length - 1, true);
+  createCard(colAndRowIndex.length - 1, ["none"], true);
   createColumn();
-  createCard(colAndRowIndex.length - 1);
+  createCard(colAndRowIndex.length - 1, [0, 0]);
 }
 
 function setParent(parentOfCard, parent, child) {
@@ -285,15 +283,10 @@ function setChild(childOfCard, parent, child) {
   if (childOfCard[parentCol].length <= parentRow) {
     childOfCard[parentCol].push([]);
   }
-  childOfCard[parentCol][parentRow].push(child);
+  if (child !== "none") {
+    childOfCard[parentCol][parentRow].push(child);
+  }
 }
-
-//test function
-
-const btnTest = document.getElementById("btnTest");
-btnTest.addEventListener("click", () => {
-  createColumn();
-});
 
 document.addEventListener("DOMContentLoaded", setDefault());
 

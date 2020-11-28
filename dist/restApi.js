@@ -31,6 +31,7 @@ export async function restAPI(
   childOfCard
 ) {
   console.log("restAPI ON");
+
   //parent 처리
   const parent = getParent(parentOfCard, currentColumnNum, currentCardIndex);
   const children = getChildren(childOfCard, currentColumnNum, currentCardIndex);
@@ -59,7 +60,7 @@ export async function restAPI(
       sourceText = getSourceText(source);
       translateEachChild(source, targets, sourceText);
     } else {
-      console.log("부모x 자식x");
+      console.log("부모o 자식o");
       //부모 o 자식 o source 부모, target나 로 1번 한 후에 source 나, target 자식으로 한번 더
       source = parent;
       targets = [[currentColumnNum, currentCardIndex]];
@@ -91,9 +92,11 @@ export async function restAPI(
 
   function getParent(parentOfCard, currentColumnNum, currentCardIndex) {
     const parent = parentOfCard[currentColumnNum][currentCardIndex];
-    if (parent[0] === "no parent") {
+
+    if (parent[0] === "none") {
       return false;
     } else {
+
       return parent;
     }
   }
