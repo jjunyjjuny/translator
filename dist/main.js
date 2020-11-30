@@ -291,7 +291,7 @@ function setChild(childOfCard, parent, child) {
   }
 }
 function createDrawbox() {
-  const draw = SVG().addTo("#board").size(100, 1000);
+  const draw = SVG().addTo("#board").size(128, 1000);
   draw.addClass("drawBox");
   draws.push(draw);
 }
@@ -300,8 +300,7 @@ function drawLine() {
   for (let i = 0; i < draws.length; i++) {
     const drawbox = draws[i];
     const familys = createFamilys(i);
-    const x_middle = 50;
-    const menu_height = document.getElementById("menu-0-0").offsetHeight;
+    const x_middle = 62;
 
     familys.forEach((family) => {
       const parent = document.getElementById(
@@ -321,15 +320,24 @@ function drawLine() {
       const y_child = childTopY - boardTopY + childCard_height;
 
       const path = drawbox.path(
-        `M0 ${y_parent} C${x_middle} ${y_parent} ${x_middle} ${y_child} ${
-          x_middle * 2
+        `M12 ${y_parent} C${x_middle} ${y_parent} ${x_middle} ${y_child} ${
+          x_middle * 2 - 12
         } ${y_child}`
       );
 
       path.fill("none");
+      path.marker("start", 6, 6, (add) => {
+        add.circle(6).fill("#444");
+        add.circle(4).fill("#fff").center(3, 3);
+      });
+
+      path.marker("end", 6, 6, (add) => {
+        add.circle(6).fill("#444");
+        add.circle(4).fill("#fff").center(3, 3);
+      });
       path.stroke({
-        color: "#f06",
-        width: 4,
+        color: "#444",
+        width: 1,
         linecap: "round",
         linejoin: "round",
       });
