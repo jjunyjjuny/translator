@@ -215,7 +215,7 @@ function createSelectorOfTranslatorType(columnIndex, rowIndex, isFirstClomun) {
 
 function createTextarea(columnIndex, rowIndex) {
   const textareaDIV = document.createElement("div");
-  textareaDIV.classList.add("card-textareaBox");
+  textareaDIV.classList.add("card-textareaBox", "flex");
 
   const textarea = document.createElement("textarea");
   textarea.setAttribute("id", `textarea-${columnIndex}-${rowIndex}`);
