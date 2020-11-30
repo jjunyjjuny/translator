@@ -74,6 +74,8 @@ function createCard(columnIndex, parent, isFirstClomun = false) {
 
   const cardList = document.getElementById(`cardList-${columnIndex}`);
   cardList.appendChild(card);
+  removeLines();
+  drawLine();
 }
 function createListBySurpportLanguageOfTranslator(
   supporedLanguae,
@@ -344,6 +346,12 @@ function drawLine() {
     });
   }
 }
+function removeLines() {
+  for (let i = 0; i < draws.length; i++) {
+    const drawbox = draws[i];
+    drawbox.clear();
+  }
+}
 function getIndexOfParents(parentColIndex) {
   const cardList = childOfCard[parentColIndex];
   const parents = [];
@@ -375,6 +383,9 @@ function createFamilys(parentColIndex) {
 
 document.getElementById("testBtn").addEventListener("click", () => {
   drawLine();
+});
+document.getElementById("testBtn2").addEventListener("click", () => {
+  removeLines();
 });
 document.addEventListener("DOMContentLoaded", setDefault());
 
