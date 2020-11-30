@@ -18,8 +18,6 @@ const board = document.getElementById("board");
 function createColumn(isFirstClomun = false) {
   const column = document.createElement("article");
   column.classList.add("column");
-  // const title = document.createElement("h2");
-  // title.innerHTML = "입력";
   colAndRowIndex.push(0);
   const columnIndex = colAndRowIndex.length - 1;
 
@@ -34,6 +32,9 @@ function createColumn(isFirstClomun = false) {
     isFirstClomun
   );
   column.appendChild(btn_addCardToCardList);
+  if (!isFirstClomun) {
+    createDrawbox();
+  }
   board.appendChild(column);
 }
 
@@ -265,7 +266,6 @@ function createButtonOfCreateCard(columnIndex, isFirstClomun) {
 function setDefault() {
   createColumn(true);
   createCard(colAndRowIndex.length - 1, ["none"], true);
-  createDrawbox();
   createColumn();
   createCard(colAndRowIndex.length - 1, [0, 0]);
 }
