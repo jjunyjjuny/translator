@@ -287,7 +287,9 @@ function setChild(childOfCard, parent, child) {
     childOfCard[parentCol][parentRow].push(child);
   }
 }
-
+function drawConnectLine(parent, child){
+  
+}
 document.addEventListener("DOMContentLoaded", setDefault());
 
 window.parent = [1, 1];

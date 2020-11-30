@@ -24,10 +24,6 @@ body {
   cursor: pointer;
 }
 
-.btn_dropdown:focus {
-  background: #2980b9;
-}
-
 .dropdownBox {
   position: relative;
 }
@@ -47,8 +43,7 @@ header {
   padding: 30px 70px;
   box-shadow: 0px 3px 8px rgb(185, 185, 185);
 }
-header nav {
-}
+
 header > nav > ul {
   font-size: 18px;
 }
@@ -60,9 +55,6 @@ header > p {
   font-size: 13px;
   padding: 10px 0;
 }
-#board {
-  /* justify-content: space-around; */
-}
 
 .column + .column {
   margin-left: 100px;
@@ -70,8 +62,6 @@ header > p {
 .cardList {
   display: flex;
   flex-direction: column;
-}
-.cardList > .card {
 }
 
 .cardList > .card + .card {
@@ -101,25 +91,21 @@ header > p {
   width: 1px;
   height: 1px;
 }
-.column
-  > .card
-  > .card-contents
+
+.card-contents
   > .card-nav
   > .language-select
   input[type="radio"]:checked
   + label {
   color: black;
 }
-.column > .card > .card-contents > .card-nav > .language-select label {
+.card-contents > .card-nav .language-select label {
   display: inline-block;
   width: 100%;
   height: 100%;
   color: #797979;
   cursor: pointer;
   padding: 24px 12px;
-}
-.column > .card > .card-nav > .language-select li + li {
-  /* margin-left: 0px; */
 }
 
 .textarea {
