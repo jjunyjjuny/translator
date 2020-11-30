@@ -303,11 +303,11 @@ function drawLine() {
     const drawbox = draws[i];
     const familys = createFamilys(i);
     const x_middle = 62;
-
     familys.forEach((family) => {
       const parent = document.getElementById(
         `contents-${family[0]}-${family[1]}`
       );
+      console.log(parent);
       const child = document.getElementById(
         `contents-${family[2]}-${family[3]}`
       );
@@ -319,11 +319,12 @@ function drawLine() {
       const parentTopY = parent.getBoundingClientRect().top;
       const childTopY = child.getBoundingClientRect().top;
       const y_parent = parentTopY - boardTopY + parentCard_height;
+      console.log(parentTopY, boardTopY, parentCard_height);
       const y_child = childTopY - boardTopY + childCard_height;
 
       const path = drawbox.path(
-        `M12 ${y_parent} C${x_middle} ${y_parent} ${x_middle} ${y_child} ${
-          x_middle * 2 - 12
+        `M14 ${y_parent} C${x_middle} ${y_parent} ${x_middle} ${y_child} ${
+          x_middle * 2 - 14
         } ${y_child}`
       );
 
@@ -381,12 +382,6 @@ function createFamilys(parentColIndex) {
   return familys;
 }
 
-document.getElementById("testBtn").addEventListener("click", () => {
-  drawLine();
-});
-document.getElementById("testBtn2").addEventListener("click", () => {
-  removeLines();
-});
 document.addEventListener("DOMContentLoaded", setDefault());
 
 window.parent = [1, 1];
