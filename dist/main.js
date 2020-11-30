@@ -1,5 +1,6 @@
 "use strict";
 import { restAPI } from "./restApi.js";
+
 const SUPPORT_LANGUAGE = [
   "한국어",
   "영어",
@@ -11,7 +12,7 @@ const SUPPORT_LANGUAGE = [
 const colAndRowIndex = [];
 const parentOfCard = [[]];
 const childOfCard = [];
-
+const draws = [];
 const board = document.getElementById("board");
 
 function createColumn(isFirstClomun = false) {
@@ -47,6 +48,7 @@ function createCard(columnIndex, parent, isFirstClomun = false) {
 
   const cardContents = document.createElement("div");
   cardContents.classList.add("card-contents");
+  cardContents.setAttribute("id", `contents-${columnIndex}-${rowIndex}`);
 
   const navDiv = createNavbar(columnIndex, rowIndex, isFirstClomun);
   cardContents.appendChild(navDiv);
@@ -263,6 +265,7 @@ function createButtonOfCreateCard(columnIndex, isFirstClomun) {
 function setDefault() {
   createColumn(true);
   createCard(colAndRowIndex.length - 1, ["none"], true);
+  createDrawbox();
   createColumn();
   createCard(colAndRowIndex.length - 1, [0, 0]);
 }
@@ -287,9 +290,84 @@ function setChild(childOfCard, parent, child) {
     childOfCard[parentCol][parentRow].push(child);
   }
 }
-function drawConnectLine(parent, child){
-  
+function createDrawbox() {
+  const draw = SVG().addTo("#board").size(100, 1000);
+  draw.addClass("drawBox");
+  draws.push(draw);
 }
+
+function drawLine() {
+  for (let i = 0; i < draws.length; i++) {
+    const drawbox = draws[i];
+    const familys = createFamilys(i);
+    const x_middle = 50;
+    const menu_height = document.getElementById("menu-0-0").offsetHeight;
+
+    familys.forEach((family) => {
+      const parent = document.getElementById(
+        `contents-${family[0]}-${family[1]}`
+      );
+      const child = document.getElementById(
+        `contents-${family[2]}-${family[3]}`
+      );
+      const parentCard_height = parent.offsetHeight / 2;
+
+      const childCard_height = child.offsetHeight / 2;
+      const boardTopY = document.getElementById("board").getBoundingClientRect()
+        .top;
+      const parentTopY = parent.getBoundingClientRect().top;
+      const childTopY = child.getBoundingClientRect().top;
+      const y_parent = parentTopY - boardTopY + parentCard_height;
+      const y_child = childTopY - boardTopY + childCard_height;
+
+      const path = drawbox.path(
+        `M0 ${y_parent} C${x_middle} ${y_parent} ${x_middle} ${y_child} ${
+          x_middle * 2
+        } ${y_child}`
+      );
+
+      path.fill("none");
+      path.stroke({
+        color: "#f06",
+        width: 4,
+        linecap: "round",
+        linejoin: "round",
+      });
+    });
+  }
+}
+function getIndexOfParents(parentColIndex) {
+  const cardList = childOfCard[parentColIndex];
+  const parents = [];
+  for (let i = 0; i < cardList.length; i++) {
+    if (cardList[i].length > 0) {
+      const parent = [parentColIndex, i];
+      parents.push(parent);
+    }
+  }
+  return parents;
+}
+function getIndexChild(parent) {
+  const [col_p, row_p] = parent;
+  const children = childOfCard[col_p][row_p];
+  return children;
+}
+function createFamilys(parentColIndex) {
+  const familys = [];
+  const parents = getIndexOfParents(parentColIndex);
+  parents.forEach((parent) => {
+    const children = getIndexChild(parent);
+    children.forEach((child) => {
+      const arr = [...parent, ...child];
+      familys.push(arr);
+    });
+  });
+  return familys;
+}
+
+document.getElementById("testBtn").addEventListener("click", () => {
+  drawLine();
+});
 document.addEventListener("DOMContentLoaded", setDefault());
 
 window.parent = [1, 1];

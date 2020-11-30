@@ -56,9 +56,9 @@ header > p {
   padding: 10px 0;
 }
 
-.column + .column {
+/* .column + .column {
   margin-left: 100px;
-}
+} */
 .cardList {
   display: flex;
   flex-direction: column;
@@ -84,6 +84,12 @@ header > p {
 .card-contents > .card-nav {
   border-bottom: 1px solid #c4c4c4;
 }
+.card-selectorBox {
+  height: 40px;
+}
+.card-contents > .card-nav .language-select > ul {
+  align-items: center;
+}
 .card-contents > .card-nav > .language-select input[type="radio"] {
   overflow: hidden;
   position: absolute;
@@ -101,11 +107,11 @@ header > p {
 }
 .card-contents > .card-nav .language-select label {
   display: inline-block;
+  box-sizing: border-box;
   width: 100%;
-  height: 100%;
   color: #797979;
   cursor: pointer;
-  padding: 24px 12px;
+  /* padding: 5px 5px; */
 }
 
 .textarea {
