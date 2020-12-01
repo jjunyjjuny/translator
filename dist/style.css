@@ -12,12 +12,12 @@ body {
   display: flex;
   flex-direction: column;
 }
-
 .container {
-  background: tan;
 }
 #board {
   margin: 0 auto;
+  padding: 0 50px;
+  margin-top: 10px;
 }
 .dropdown {
   cursor: pointer;

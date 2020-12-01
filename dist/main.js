@@ -310,7 +310,7 @@ function setChild(childOfCard, parent, child) {
 }
 
 function createDrawbox() {
-  const draw = SVG().addTo("#board").size(128, 1000);
+  const draw = SVG().addTo("#board").size(128, 500);
   draw.addClass("drawBox");
   draws.push(draw);
 }
@@ -318,6 +318,7 @@ function createDrawbox() {
 function drawLine() {
   for (let i = 0; i < draws.length; i++) {
     const drawbox = draws[i];
+
     const familys = createFamilys(i);
     const x_middle = 62;
     familys.forEach((family) => {
@@ -336,6 +337,7 @@ function drawLine() {
       const childTopY = child.getBoundingClientRect().top;
       const y_parent = parentTopY - boardTopY + parentCard_height;
       const y_child = childTopY - boardTopY + childCard_height;
+      drawbox.size(128, y_child + 50);
 
       const path = drawbox.path(
         `M14 ${y_parent} C${x_middle} ${y_parent} ${x_middle} ${y_child} ${
