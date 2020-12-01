@@ -21,6 +21,7 @@ function createColumn(isFirstClomun = false) {
   column.classList.add("column");
   colAndRowIndex.push(0);
   const columnIndex = colAndRowIndex.length - 1;
+  column.setAttribute("id", `column-${columnIndex}`);
 
   const cardList = document.createElement("div");
   cardList.setAttribute("id", `cardList-${columnIndex}`);
@@ -407,41 +408,49 @@ function createFamilys(parentColIndex) {
 }
 function removeCard(col, row) {
   const parent = eraseParentIndexOnParentOfCard(parentOfCard, col, row);
-  if (parent === "no parent") {
-    console.log("no parent");
-  } else {
+  if (parent !== "no parent") {
     const [p_col, p_row] = parent;
     eraseChildIndexOnChildOfCard(childOfCard, p_col, p_row, col, row);
   }
 
   const children = eraseChildrenIndexOnChildOfCard(childOfCard, col, row);
-  if (children === "no children") {
-    console.log("no children");
-  } else {
+  if (children !== "no children") {
     children.forEach((child) => {
       const [c_col, c_row] = child;
       eraseParentIndexOnParentOfCard(parentOfCard, c_col, c_row);
     });
   }
   document.getElementById(`card-${col}-${row}`).remove();
+  colAndRowIndex[col]--;
+
+  if (colAndRowIndex[col] === 0) {
+    removeColumn(col);
+  }
+
   removeLines();
   drawLine();
 }
+
+function removeColumn(col) {
+  document.getElementById(`column-${col}`).remove();
+  colAndRowIndex.splice(col, 1);
+  removeDrawBox(col);
+}
+function removeDrawBox(col) {
+  draws[col - 1].remove();
+  draws.splice(col - 1, 1);
+}
+
 function eraseParentIndexOnParentOfCard(parentOfCard, col, row) {
-  console.log("on eraseParent");
   if (parentOfCard[col][row][0] === "none") {
     return "no parent";
   } else {
     const parent = parentOfCard[col][row].slice();
-    console.log("parent :", parent);
     parentOfCard[col][row][0] = "none";
-    console.log("parentOfCard[col][row] :", parentOfCard[col][row]);
-    console.log("parent :", parent);
     return parent;
   }
 }
 function eraseChildrenIndexOnChildOfCard(childOfCard, col, row) {
-  console.log("on eraseChildren");
   if (childOfCard[col][row].length === 0) {
     return "no children";
   } else {
@@ -451,7 +460,6 @@ function eraseChildrenIndexOnChildOfCard(childOfCard, col, row) {
   }
 }
 function eraseChildIndexOnChildOfCard(childOfCard, p_col, p_row, c_col, c_row) {
-  console.log("on eraseChild");
   const children = childOfCard[p_col][p_row];
   if (children.length === 0) {
     return "no children";
