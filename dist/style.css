@@ -1,6 +1,9 @@
+* {
+  box-sizing: border-box;
+}
 html,
 body {
-  height: 100%;
+  background: #f1f1f1;
 }
 .flex {
   display: flex;
@@ -9,16 +12,11 @@ body {
   display: flex;
   flex-direction: column;
 }
-.wrap {
-  background: #f1f1f1;
-  position: relative;
-  height: 100%;
-}
 
 .container {
+}
+#board {
   margin: 0 auto;
-  justify-content: center;
-  padding: 60px 0;
 }
 .dropdown {
   cursor: pointer;
@@ -55,10 +53,6 @@ header > p {
   font-size: 13px;
   padding: 10px 0;
 }
-
-/* .column + .column {
-  margin-left: 100px;
-} */
 .cardList {
   display: flex;
   flex-direction: column;
@@ -67,14 +61,17 @@ header > p {
 .cardList > .card + .card {
   margin-top: 32px;
 }
+.card {
+  width: 540px;
+}
 
 .card > .card-menu {
   justify-content: flex-end;
-  background: #f1f1f1;
-  padding: 10px;
+  align-items: center;
+  padding: 16px 24px;
 }
-.card > .card-menu span + span {
-  margin-left: 20px;
+.card > .card-menu img + img {
+  margin-left: 16px;
 }
 .card > .card-contents {
   background: white;
@@ -83,14 +80,25 @@ header > p {
 }
 .card-contents > .card-nav {
   border-bottom: 1px solid #c4c4c4;
+  height: 62px;
 }
+
 .card-selectorBox {
-  height: 40px;
+  padding: 12px 20px;
+  border-right: 1px solid #c4c4c4;
 }
-.card-contents > .card-nav .language-select > ul {
+.card-selectedBox {
   align-items: center;
+  justify-content: space-between;
 }
-.card-contents > .card-nav > .language-select input[type="radio"] {
+.language-select > ul {
+  align-items: center;
+  padding: 0 24px;
+}
+.language-select > ul > li + li {
+  margin-left: 19px;
+}
+.language-select input[type="radio"] {
   overflow: hidden;
   position: absolute;
   left: -9999px;
@@ -107,7 +115,6 @@ header > p {
 }
 .card-contents > .card-nav .language-select label {
   display: inline-block;
-  box-sizing: border-box;
   width: 100%;
   color: #797979;
   cursor: pointer;
@@ -117,17 +124,38 @@ header > p {
   height: 26px;
 }
 .card-textareaBox {
-  box-sizing: border-box;
   justify-content: center;
-  align-items: center;
-  padding: 20px;
+  padding: 24px;
 }
 .card-textarea {
   width: 100%;
   height: 150px;
-
+  resize: none;
   border: none;
 }
 .card-textarea:focus {
   outline: none;
+}
+.card-footer {
+  align-items: center;
+  justify-content: flex-end;
+  height: 50px;
+  padding: 0 24px 24px 24px;
+}
+.card-footer > div + div {
+  margin-left: 24px;
+}
+
+.btn_createCard {
+  margin: 0 auto;
+  justify-content: center;
+  align-items: center;
+  border: 2px solid #414141;
+  border-radius: 5px;
+
+  width: 150px;
+  height: 34px;
+  margin-top: 40px;
+
+  color: #414141;
 }

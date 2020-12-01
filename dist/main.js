@@ -5,8 +5,9 @@ const SUPPORT_LANGUAGE = [
   "한국어",
   "영어",
   "일본어",
-  "중국어(간체)",
-  "중국어(번체)",
+  "중국어",
+  "스페인어",
+  "기타",
 ];
 
 const colAndRowIndex = [];
@@ -123,15 +124,22 @@ function createMenuBar(columnIndex, rowIndex) {
   const menuDIV = document.createElement("div");
   menuDIV.classList.add("card-menu", "flex");
   menuDIV.setAttribute("id", `menu-${columnIndex}-${rowIndex}`);
-  const minimizeSapn = document.createElement("span");
-  minimizeSapn.classList.add("minimize");
-  minimizeSapn.innerHTML = "ㅡ";
-  const closeSapn = document.createElement("span");
-  closeSapn.classList.add("close");
-  closeSapn.innerHTML = "X";
 
-  menuDIV.appendChild(minimizeSapn);
-  menuDIV.appendChild(closeSapn);
+  const btn_minimize = document.createElement("img");
+  btn_minimize.setAttribute("src", "./src/btn_minimize.png");
+  btn_minimize.setAttribute("width", 32);
+  btn_minimize.setAttribute("height", 32);
+  btn_minimize.classList.add("minimize");
+
+  const btn_close = document.createElement("img");
+  btn_close.setAttribute("src", "./src/btn_x.png");
+  btn_close.setAttribute("width", 24);
+  btn_close.setAttribute("height", 24);
+
+  btn_close.classList.add("close");
+
+  menuDIV.appendChild(btn_minimize);
+  menuDIV.appendChild(btn_close);
   return menuDIV;
 }
 
@@ -178,6 +186,8 @@ function createSelectorOfTranslatorType(columnIndex, rowIndex, isFirstClomun) {
 
     const btn_toggle = document.createElement("img");
     btn_toggle.setAttribute("src", "./src/btn_toggle.png");
+    btn_toggle.setAttribute("width", 24);
+    btn_toggle.setAttribute("height", 24);
 
     selectedBox.appendChild(selectedTranslatorType);
     selectedBox.appendChild(btn_toggle);
@@ -224,25 +234,31 @@ function createTextarea(columnIndex, rowIndex) {
   });
   textarea.classList.add("card-textarea");
   textareaDIV.appendChild(textarea);
+
+  const btn_removeText = document.createElement("img");
+  btn_removeText.setAttribute("src", "./src/btn_x.png");
+  btn_removeText.setAttribute("width", 24);
+  btn_removeText.setAttribute("height", 24);
+  textareaDIV.appendChild(btn_removeText);
   return textareaDIV;
 }
 
 function createFooter(columnIndex, rowIndex) {
   const footerDIV = document.createElement("div");
-  footerDIV.classList.add("flex", "card-footer");
+  footerDIV.classList.add("card-footer", "flex");
 
   const textCount = document.createElement("div");
   textCount.classList.add("card-textCount");
   textCount.innerText = "0 / 5000";
 
-  const btn_CreateChildCard = document.createElement("div");
+  const btn_createChildCard = document.createElement("div");
   const img_btnOfCreateChildCard = document.createElement("img");
   img_btnOfCreateChildCard.setAttribute(
     "src",
     "./src/btn_create_child_card.png"
   );
-  btn_CreateChildCard.appendChild(img_btnOfCreateChildCard);
-  btn_CreateChildCard.addEventListener("click", () => {
+  btn_createChildCard.appendChild(img_btnOfCreateChildCard);
+  btn_createChildCard.addEventListener("click", () => {
     if (colAndRowIndex.length === columnIndex + 1) {
       createColumn();
     }
@@ -250,14 +266,14 @@ function createFooter(columnIndex, rowIndex) {
   });
 
   footerDIV.appendChild(textCount);
-  footerDIV.appendChild(btn_CreateChildCard);
+  footerDIV.appendChild(btn_createChildCard);
   return footerDIV;
 }
 
 function createButtonOfCreateCard(columnIndex, isFirstClomun) {
   const button = document.createElement("button");
-  button.classList.add("btn_CreateCard");
-  button.innerText = "+";
+  button.classList.add("btn_createCard", "flex");
+  button.innerHTML = `<span>번역박스 추가</span><img src="./src/btn_plus.png"/ width="14" height="16">`;
 
   button.addEventListener("click", () => {
     createCard(columnIndex, ["none"], isFirstClomun);
@@ -292,6 +308,7 @@ function setChild(childOfCard, parent, child) {
     childOfCard[parentCol][parentRow].push(child);
   }
 }
+
 function createDrawbox() {
   const draw = SVG().addTo("#board").size(128, 1000);
   draw.addClass("drawBox");
@@ -307,7 +324,6 @@ function drawLine() {
       const parent = document.getElementById(
         `contents-${family[0]}-${family[1]}`
       );
-      console.log(parent);
       const child = document.getElementById(
         `contents-${family[2]}-${family[3]}`
       );
@@ -319,7 +335,6 @@ function drawLine() {
       const parentTopY = parent.getBoundingClientRect().top;
       const childTopY = child.getBoundingClientRect().top;
       const y_parent = parentTopY - boardTopY + parentCard_height;
-      console.log(parentTopY, boardTopY, parentCard_height);
       const y_child = childTopY - boardTopY + childCard_height;
 
       const path = drawbox.path(
@@ -329,14 +344,14 @@ function drawLine() {
       );
 
       path.fill("none");
-      path.marker("start", 6, 6, (add) => {
-        add.circle(6).fill("#444");
-        add.circle(4).fill("#fff").center(3, 3);
+      path.marker("start", 10, 10, (add) => {
+        add.circle(10).fill("#444");
+        add.circle(8).fill("#fff").center(5, 5);
       });
 
-      path.marker("end", 6, 6, (add) => {
-        add.circle(6).fill("#444");
-        add.circle(4).fill("#fff").center(3, 3);
+      path.marker("end", 10, 10, (add) => {
+        add.circle(10).fill("#444");
+        add.circle(8).fill("#fff").center(5, 5);
       });
       path.stroke({
         color: "#444",
@@ -347,12 +362,14 @@ function drawLine() {
     });
   }
 }
+
 function removeLines() {
   for (let i = 0; i < draws.length; i++) {
     const drawbox = draws[i];
     drawbox.clear();
   }
 }
+
 function getIndexOfParents(parentColIndex) {
   const cardList = childOfCard[parentColIndex];
   const parents = [];
@@ -364,11 +381,13 @@ function getIndexOfParents(parentColIndex) {
   }
   return parents;
 }
+
 function getIndexChild(parent) {
   const [col_p, row_p] = parent;
   const children = childOfCard[col_p][row_p];
   return children;
 }
+
 function createFamilys(parentColIndex) {
   const familys = [];
   const parents = getIndexOfParents(parentColIndex);

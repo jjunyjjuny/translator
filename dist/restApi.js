@@ -3,7 +3,7 @@ const GOOGLE_SUPPORT_LANGUAGE = {
   한국어: "ko",
   영어: "en",
   일본어: "ja",
-  "중국어(간체)": "zh-CN",
+  중국어: "zh-CN",
   "중국어(번체)": "zh-TW",
   독일어: "de",
 };
@@ -11,7 +11,7 @@ const PAPAGO_SUPPORT_LANGUAGE = {
   한국어: "ko",
   영어: "en",
   일본어: "ja",
-  "중국어(간체)": "zh-CN",
+  중국어: "zh-CN",
   "중국어(번체)": "zh-TW",
   독일어: "de",
 };
@@ -19,7 +19,7 @@ const KAKAO_SUPPORT_LANGUAGE = {
   한국어: "kr",
   영어: "en",
   일본어: "jp",
-  "중국어(간체)": "cn",
+  중국어: "cn",
   "중국어(번체)": "cn",
   독일어: "de",
 };
@@ -96,7 +96,6 @@ export async function restAPI(
     if (parent[0] === "none") {
       return false;
     } else {
-
       return parent;
     }
   }
