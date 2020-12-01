@@ -411,10 +411,10 @@ function removeCard(col, row) {
     console.log("no parent");
   } else {
     const [p_col, p_row] = parent;
-    eraseChildIndexOnChildOfCard(childOfCard, p_col, p_row);
+    eraseChildIndexOnChildOfCard(childOfCard, p_col, p_row, col, row);
   }
 
-  const children = eraseChildIndexOnChildOfCard(childOfCard, col, row);
+  const children = eraseChildrenIndexOnChildOfCard(childOfCard, col, row);
   if (children === "no children") {
     console.log("no children");
   } else {
@@ -428,21 +428,44 @@ function removeCard(col, row) {
   drawLine();
 }
 function eraseParentIndexOnParentOfCard(parentOfCard, col, row) {
+  console.log("on eraseParent");
   if (parentOfCard[col][row][0] === "none") {
     return "no parent";
   } else {
     const parent = parentOfCard[col][row].slice();
-    parentOfCard[col][row].length = 0;
+    console.log("parent :", parent);
+    parentOfCard[col][row][0] = "none";
+    console.log("parentOfCard[col][row] :", parentOfCard[col][row]);
+    console.log("parent :", parent);
     return parent;
   }
 }
-function eraseChildIndexOnChildOfCard(childOfCard, col, row) {
+function eraseChildrenIndexOnChildOfCard(childOfCard, col, row) {
+  console.log("on eraseChildren");
   if (childOfCard[col][row].length === 0) {
     return "no children";
   } else {
     const children = childOfCard[col][row].slice();
     childOfCard[col][row].length = 0;
     return children;
+  }
+}
+function eraseChildIndexOnChildOfCard(childOfCard, p_col, p_row, c_col, c_row) {
+  console.log("on eraseChild");
+  const children = childOfCard[p_col][p_row];
+  if (children.length === 0) {
+    return "no children";
+  } else {
+    let index = 0;
+    for (let i = 0; i < children.length; i++) {
+      if (
+        children[i].length === [c_col, c_row].length &&
+        children[i].every((value, index) => value === [c_col, c_row][index])
+      ) {
+        index = i;
+      }
+    }
+    children.splice(index, 1);
   }
 }
 document.addEventListener("DOMContentLoaded", setDefault());

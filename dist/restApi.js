@@ -65,13 +65,11 @@ export async function restAPI(
       source = parent;
       targets = [[currentColumnNum, currentCardIndex]];
       sourceText = getSourceText(source);
-      console.log("1 :", source, targets, sourceText);
       translateEachChild(source, targets, sourceText);
 
       source = [currentColumnNum, currentCardIndex];
       targets = children.slice();
       sourceText = getSourceText(source);
-      console.log("2 :", source, targets, sourceText);
       translateEachChild(source, targets, sourceText);
     }
   }
@@ -103,7 +101,7 @@ export async function restAPI(
   }
 
   function getChildren(childOfCard, currentColumnNum, currentCardIndex) {
-    if (!childOfCard[currentColumnNum]) {
+    if (childOfCard[currentColumnNum][currentCardIndex].length === 0) {
       return false;
     } else {
       const children = childOfCard[currentColumnNum][currentCardIndex];
