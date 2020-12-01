@@ -65,11 +65,13 @@ export async function restAPI(
       source = parent;
       targets = [[currentColumnNum, currentCardIndex]];
       sourceText = getSourceText(source);
+      console.log("1 :", source, targets, sourceText);
       translateEachChild(source, targets, sourceText);
 
       source = [currentColumnNum, currentCardIndex];
       targets = children.slice();
       sourceText = getSourceText(source);
+      console.log("2 :", source, targets, sourceText);
       translateEachChild(source, targets, sourceText);
     }
   }
