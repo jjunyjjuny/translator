@@ -325,6 +325,18 @@ function drawLine() {
 
     const familys = createFamilys(i);
     const x_middle = 62;
+
+    const left_cardListHeihgt = document.getElementById(`cardList-${i}`)
+      .offsetHeight;
+    const right_cardListHeihgt = document.getElementById(`cardList-${i + 1}`)
+      .offsetHeight;
+    const drawboxHeight =
+      left_cardListHeihgt > right_cardListHeihgt
+        ? left_cardListHeihgt
+        : right_cardListHeihgt;
+    drawbox.size(128, drawboxHeight);
+    console.log(drawboxHeight);
+
     familys.forEach((family) => {
       const parent = document.getElementById(
         `contents-${family[0]}-${family[1]}`
@@ -341,7 +353,6 @@ function drawLine() {
       const childTopY = child.getBoundingClientRect().top;
       const y_parent = parentTopY - boardTopY + parentCard_height;
       const y_child = childTopY - boardTopY + childCard_height;
-      drawbox.size(128, y_parent + y_child);
 
       const path = drawbox.path(
         `M14 ${y_parent} C${x_middle} ${y_parent} ${x_middle} ${y_child} ${
