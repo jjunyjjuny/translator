@@ -106,7 +106,7 @@ function createListBySurpportLanguageOfTranslator(
   const selectedLanguage = document.createElement("div");
   selectedLanguage.classList.add("btn_dropdown", "flex");
   selectedLanguage.addEventListener("click", () => {
-    otherLanguages.classList.toggle("show");
+    dropdownContent.classList.toggle("show");
   });
   selectedLanguage.innerHTML = `<span></span><img src="./src/btn_toggle.png"/>`;
   otherLanguagesBox.appendChild(selectedLanguage);
@@ -115,9 +115,13 @@ function createListBySurpportLanguageOfTranslator(
   dropdownBox.classList.add("dropdownBox");
   otherLanguagesBox.appendChild(dropdownBox);
 
+  const dropdownContent = document.createElement("div");
+  dropdownContent.classList.add("dropdown-content");
+  dropdownBox.appendChild(dropdownContent);
+
   const otherLanguages = document.createElement("ul");
-  otherLanguages.classList.add("otherLanguages", "dropdown-content", "flex");
-  dropdownBox.appendChild(otherLanguages);
+  otherLanguages.classList.add("otherLanguages", "flex");
+  dropdownContent.appendChild(otherLanguages);
 
   supporedLanguae.forEach((lan, index) => {
     const li = document.createElement("li");
@@ -138,7 +142,7 @@ function createListBySurpportLanguageOfTranslator(
     }
     input.addEventListener("click", () => {
       restAPI(columnIndex, rowIndex, parentOfCard, childOfCard);
-      otherLanguages.classList.remove("show");
+      dropdownContent.classList.remove("show");
       if (index > 3) {
         selectedLanguage.innerHTML = `<span>${lan}</span><img src="./src/btn_toggle.png"/>`;
         selectedLanguage.style.color = "black";
@@ -248,6 +252,7 @@ function createSelectorOfTranslatorType(columnIndex, rowIndex, isFirstClomun) {
 
   const selectorList = document.createElement("ul");
   selectorList.classList.add("dropdown-content");
+
   list.forEach((type) => {
     const li = document.createElement("li");
     const img = document.createElement("img");

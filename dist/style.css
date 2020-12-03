@@ -114,6 +114,14 @@ header > p {
   width: 1px;
   height: 1px;
 }
+.otherLanguages {
+  width: 200px;
+  flex-wrap: wrap;
+}
+.otherLanguages > li {
+  flex-basis: 50%;
+  padding: 10px;
+}
 
 .card-contents
   > .card-nav
