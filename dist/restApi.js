@@ -5,7 +5,6 @@ import {
   KAKAO_SUPPORT_LANGUAGE,
 } from "./language_code.js";
 
-
 export async function restAPI(
   currentColumnNum,
   currentCardIndex,
@@ -117,7 +116,7 @@ function getSourceLanguage(source, typeOfTranslator) {
       break;
   }
 
-  return sourceLanguageNotation;
+  return [sourceLanguage, sourceLanguageNotation];
 }
 function getTypeOfTranslator(child) {
   const [childCol, childRow] = child;
@@ -144,7 +143,7 @@ function getTargetLanguage(target, typeOfTranslator) {
       targetLanguageNotation = KAKAO_SUPPORT_LANGUAGE[targetLanguage];
       break;
   }
-  return targetLanguageNotation;
+  return [targetLanguage, targetLanguageNotation];
 }
 function getTranslatedText(
   typeOfTranslator,
@@ -159,13 +158,19 @@ function getTranslatedText(
       type: "POST",
       data: {
         original: sourceText,
-        source: sourceLanguage,
-        target: targetLanguage,
+        source: sourceLanguage[1],
+        target: targetLanguage[1],
         type: typeOfTranslator,
       },
       success: (result) => {
         if (result) {
-          resolve(result.result);
+          if (result.result === "error") {
+            const type = resolve(
+              `현재 ${typeOfTranslator}에서 ${sourceLanguage[0]} -> ${targetLanguage[0]}은(는) 불가능합니다.`
+            );
+          } else {
+            resolve(result.result);
+          }
         }
       },
       error: (request, status, error) => {
