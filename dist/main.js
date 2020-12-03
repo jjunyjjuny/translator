@@ -132,18 +132,24 @@ function createMenuBar(columnIndex, rowIndex) {
   btn_minimize.setAttribute("width", 32);
   btn_minimize.setAttribute("height", 32);
   btn_minimize.classList.add("minimize");
-
-  const btn_close = document.createElement("img");
-  btn_close.setAttribute("src", "./src/btn_x.png");
-  btn_close.setAttribute("width", 24);
-  btn_close.setAttribute("height", 24);
-
-  btn_close.classList.add("close");
-  btn_close.addEventListener("click", () => {
-    removeCard(columnIndex, rowIndex);
-  });
   menuDIV.appendChild(btn_minimize);
-  menuDIV.appendChild(btn_close);
+
+  if (
+    !(columnIndex === 0 && rowIndex === 0) &&
+    !(columnIndex === 1 && rowIndex === 0)
+  ) {
+    const btn_close = document.createElement("img");
+    btn_close.setAttribute("src", "./src/btn_x.png");
+    btn_close.setAttribute("width", 24);
+    btn_close.setAttribute("height", 24);
+
+    btn_close.classList.add("close");
+    btn_close.addEventListener("click", () => {
+      removeCard(columnIndex, rowIndex);
+    });
+    menuDIV.appendChild(btn_close);
+  }
+
   return menuDIV;
 }
 
