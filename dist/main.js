@@ -1,13 +1,19 @@
 "use strict";
 import { restAPI } from "./restApi.js";
 
-const SUPPORT_LANGUAGE = [
+const DEFAULT_LANGUAGE = [
   "한국어",
   "영어",
   "일본어",
   "중국어",
   "스페인어",
-  "기타",
+  "프랑스어",
+  "독일어",
+  "러시아어",
+  "이탈리아어",
+  "베트남어",
+  "태국어",
+  "인도네시아어",
 ];
 
 const colAndRowIndex = [];
@@ -80,6 +86,7 @@ function createCard(columnIndex, parent, isFirstClomun = false) {
   removeLines();
   drawLine();
 }
+
 function createListBySurpportLanguageOfTranslator(
   supporedLanguae,
   columnIndex,
@@ -87,13 +94,35 @@ function createListBySurpportLanguageOfTranslator(
 ) {
   const surppotrLanguageListDIV = document.createElement("div");
   surppotrLanguageListDIV.classList.add("language-select", "flex");
-  const ul = document.createElement("ul");
-  ul.classList.add("flex");
-  let radio_count = 0;
-  supporedLanguae.forEach((lan) => {
+
+  const defaultLanguages = document.createElement("ul");
+  defaultLanguages.classList.add("defaultLanguages", "flex");
+  surppotrLanguageListDIV.appendChild(defaultLanguages);
+
+  const otherLanguagesBox = document.createElement("div");
+  otherLanguagesBox.classList.add("dropdown");
+  surppotrLanguageListDIV.appendChild(otherLanguagesBox);
+
+  const selectedLanguage = document.createElement("div");
+  selectedLanguage.classList.add("btn_dropdown", "flex");
+  selectedLanguage.addEventListener("click", () => {
+    otherLanguages.classList.toggle("show");
+  });
+  selectedLanguage.innerHTML = `<span></span><img src="./src/btn_toggle.png"/>`;
+  otherLanguagesBox.appendChild(selectedLanguage);
+
+  const dropdownBox = document.createElement("div");
+  dropdownBox.classList.add("dropdownBox");
+  otherLanguagesBox.appendChild(dropdownBox);
+
+  const otherLanguages = document.createElement("ul");
+  otherLanguages.classList.add("otherLanguages", "dropdown-content", "flex");
+  dropdownBox.appendChild(otherLanguages);
+
+  supporedLanguae.forEach((lan, index) => {
     const li = document.createElement("li");
     const input = document.createElement("input");
-    const radioIndex = `radio-${columnIndex}-${rowIndex}-${radio_count++}`;
+    const radioIndex = `radio-${columnIndex}-${rowIndex}-${index}`;
     input.setAttribute("type", "radio");
     input.setAttribute("id", radioIndex);
     input.setAttribute("name", `radio-${columnIndex}-${rowIndex}`);
@@ -109,19 +138,29 @@ function createListBySurpportLanguageOfTranslator(
     }
     input.addEventListener("click", () => {
       restAPI(columnIndex, rowIndex, parentOfCard, childOfCard);
+      otherLanguages.classList.remove("show");
+      if (index > 3) {
+        selectedLanguage.innerHTML = `<span>${lan}</span><img src="./src/btn_toggle.png"/>`;
+        selectedLanguage.style.color = "black";
+      } else {
+        selectedLanguage.style.color = "#797979";
+      }
     });
-
     const label = document.createElement("label");
     label.setAttribute("for", radioIndex);
     label.innerHTML = lan;
     li.appendChild(input);
     li.appendChild(label);
-    ul.appendChild(li);
-    surppotrLanguageListDIV.appendChild(ul);
+    if (index < 4) {
+      defaultLanguages.appendChild(li);
+    } else {
+      otherLanguages.appendChild(li);
+    }
   });
 
   return surppotrLanguageListDIV;
 }
+
 function createMenuBar(columnIndex, rowIndex) {
   const menuDIV = document.createElement("div");
   menuDIV.classList.add("card-menu", "flex");
@@ -157,17 +196,17 @@ function createNavbar(columnIndex, rowIndex, isFirstClomun) {
   const navDIV = document.createElement("div");
   navDIV.classList.add("card-nav", "flex");
 
-  const selector = createSelectorOfTranslatorType(
-    columnIndex,
-    rowIndex,
-    isFirstClomun
-  );
   const surppotrLanguageList = createListBySurpportLanguageOfTranslator(
-    SUPPORT_LANGUAGE,
+    DEFAULT_LANGUAGE,
     columnIndex,
     rowIndex
   );
   if (!isFirstClomun) {
+    const selector = createSelectorOfTranslatorType(
+      columnIndex,
+      rowIndex,
+      isFirstClomun
+    );
     navDIV.appendChild(selector);
   }
 
@@ -176,61 +215,57 @@ function createNavbar(columnIndex, rowIndex, isFirstClomun) {
 }
 
 function createSelectorOfTranslatorType(columnIndex, rowIndex, isFirstClomun) {
-  if (!isFirstClomun) {
-    const selectorDIV = document.createElement("div");
-    selectorDIV.classList.add("card-selectorBox", "dropdown", "flex-vertical");
+  const selectorDIV = document.createElement("div");
+  selectorDIV.classList.add("card-selectorBox", "dropdown", "flex-vertical");
 
-    const selectedBox = document.createElement("div");
-    selectedBox.classList.add("card-selectedBox", "btn_dropdown", "flex");
-    selectedBox.addEventListener("click", () => {
-      selectorList.classList.toggle("show");
+  const selectedBox = document.createElement("div");
+  selectedBox.classList.add("card-selectedBox", "btn_dropdown", "flex");
+  selectedBox.addEventListener("click", () => {
+    selectorList.classList.toggle("show");
+  });
+
+  const selectedTranslatorType = document.createElement("img");
+  selectedTranslatorType.setAttribute(
+    "id",
+    `selector-${columnIndex}-${rowIndex}`
+  );
+  selectedTranslatorType.setAttribute("src", "./src/img_google.png");
+  selectedTranslatorType.setAttribute("data-type", "google");
+
+  const btn_toggle = document.createElement("img");
+  btn_toggle.setAttribute("src", "./src/btn_toggle.png");
+  btn_toggle.setAttribute("width", 24);
+  btn_toggle.setAttribute("height", 24);
+
+  selectedBox.appendChild(selectedTranslatorType);
+  selectedBox.appendChild(btn_toggle);
+
+  selectorDIV.appendChild(selectedBox);
+
+  const list = ["google", "papago", "kakao"];
+  const dropdownBox = document.createElement("div");
+  dropdownBox.classList.add("dropdownBox");
+
+  const selectorList = document.createElement("ul");
+  selectorList.classList.add("dropdown-content");
+  list.forEach((type) => {
+    const li = document.createElement("li");
+    const img = document.createElement("img");
+    img.setAttribute("src", `./src/img_${type}.png`);
+    img.setAttribute("data-type", `${type}`);
+    img.addEventListener("click", () => {
+      selectedTranslatorType.setAttribute("src", `./src/img_${type}.png`);
+      selectedTranslatorType.setAttribute("data-type", `${type}`);
+      selectorList.classList.remove("show");
+      restAPI(columnIndex, rowIndex, parentOfCard, childOfCard);
     });
+    li.appendChild(img);
+    selectorList.appendChild(li);
+  });
+  dropdownBox.appendChild(selectorList);
+  selectorDIV.appendChild(dropdownBox);
 
-    const selectedTranslatorType = document.createElement("img");
-    selectedTranslatorType.setAttribute(
-      "id",
-      `selector-${columnIndex}-${rowIndex}`
-    );
-    selectedTranslatorType.setAttribute("src", "./src/img_google.png");
-    selectedTranslatorType.setAttribute("data-type", "google");
-
-    const btn_toggle = document.createElement("img");
-    btn_toggle.setAttribute("src", "./src/btn_toggle.png");
-    btn_toggle.setAttribute("width", 24);
-    btn_toggle.setAttribute("height", 24);
-
-    selectedBox.appendChild(selectedTranslatorType);
-    selectedBox.appendChild(btn_toggle);
-
-    selectorDIV.appendChild(selectedBox);
-
-    const list = ["google", "papago", "kakao"];
-    const dropdownBox = document.createElement("div");
-    dropdownBox.classList.add("dropdownBox");
-
-    const selectorList = document.createElement("ul");
-    selectorList.classList.add("dropdown-content");
-    list.forEach((type) => {
-      const li = document.createElement("li");
-      const img = document.createElement("img");
-      img.setAttribute("src", `./src/img_${type}.png`);
-      img.setAttribute("data-type", `${type}`);
-      img.addEventListener("click", () => {
-        selectedTranslatorType.setAttribute("src", `./src/img_${type}.png`);
-        selectedTranslatorType.setAttribute("data-type", `${type}`);
-        selectorList.classList.remove("show");
-        restAPI(columnIndex, rowIndex, parentOfCard, childOfCard);
-      });
-      li.appendChild(img);
-      selectorList.appendChild(li);
-    });
-    dropdownBox.appendChild(selectorList);
-    selectorDIV.appendChild(dropdownBox);
-
-    return selectorDIV;
-  } else {
-    return "error";
-  }
+  return selectorDIV;
 }
 
 function createTextarea(columnIndex, rowIndex) {
@@ -341,7 +376,6 @@ function drawLine() {
         ? left_cardListHeihgt
         : right_cardListHeihgt;
     drawbox.size(128, drawboxHeight);
-    console.log(drawboxHeight);
 
     familys.forEach((family) => {
       const parent = document.getElementById(

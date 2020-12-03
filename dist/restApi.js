@@ -1,28 +1,10 @@
 "use strict";
-const GOOGLE_SUPPORT_LANGUAGE = {
-  한국어: "ko",
-  영어: "en",
-  일본어: "ja",
-  중국어: "zh-CN",
-  "중국어(번체)": "zh-TW",
-  독일어: "de",
-};
-const PAPAGO_SUPPORT_LANGUAGE = {
-  한국어: "ko",
-  영어: "en",
-  일본어: "ja",
-  중국어: "zh-CN",
-  "중국어(번체)": "zh-TW",
-  독일어: "de",
-};
-const KAKAO_SUPPORT_LANGUAGE = {
-  한국어: "kr",
-  영어: "en",
-  일본어: "jp",
-  중국어: "cn",
-  "중국어(번체)": "cn",
-  독일어: "de",
-};
+import {
+  GOOGLE_SUPPORT_LANGUAGE,
+  PAPAGO_SUPPORT_LANGUAGE,
+  KAKAO_SUPPORT_LANGUAGE,
+} from "./language_code.js";
+
 
 export async function restAPI(
   currentColumnNum,
