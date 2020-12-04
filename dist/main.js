@@ -82,6 +82,7 @@ function createCard(columnIndex, parent, isFirstClomun = false) {
   }
 
   const cardList = document.getElementById(`cardList-${columnIndex}`);
+  
   cardList.appendChild(card);
   removeLines();
   drawLine();
@@ -395,7 +396,7 @@ function drawLine() {
     const drawbox = draws[i];
 
     const familys = createFamilys(i);
-    const x_middle = 62;
+    const x_middle = 64;
 
     const left_cardListHeihgt = document.getElementById(`cardList-${i}`)
       .offsetHeight;
@@ -406,6 +407,8 @@ function drawLine() {
         ? left_cardListHeihgt
         : right_cardListHeihgt;
     drawbox.size(128, drawboxHeight);
+
+    
 
     familys.forEach((family) => {
       const parent = document.getElementById(
@@ -449,6 +452,7 @@ function drawLine() {
     });
   }
 }
+function drawCircle() {}
 
 function removeLines() {
   for (let i = 0; i < draws.length; i++) {
