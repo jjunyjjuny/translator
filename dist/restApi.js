@@ -43,6 +43,7 @@ export async function restAPI(
     } else {
       console.log("부모o 자식o");
       //부모 o 자식 o source 부모, target나 로 1번 한 후에 source 나, target 자식으로 한번 더
+
       source = parent;
       targets = [[currentColumnNum, currentCardIndex]];
       sourceText = getSourceText(source);
@@ -55,7 +56,6 @@ export async function restAPI(
     }
   }
 
-  // chidren 처리(chidren 길이만큼 반복해야 함 (호출, 넣기))
   async function translateEachChild(source, targets, sourceText) {
     targets.forEach(async (target) => {
       const typeOfTranslator = getTypeOfTranslator(target);
@@ -87,6 +87,24 @@ export async function restAPI(
     } else {
       const children = childOfCard[currentColumnNum][currentCardIndex];
       return children;
+    }
+  }
+  function insertTranslatedTextToBox(translatedText, target) {
+    const [targetColumnNum, targetCardIndex] = target;
+    document.querySelector(
+      `#textarea-${targetColumnNum}-${targetCardIndex}`
+    ).value = translatedText;
+    const children = getChildren(childOfCard, targetColumnNum, targetCardIndex);
+
+    const count = document.getElementById(
+      `textcount-${targetColumnNum}-${targetCardIndex}`
+    );
+    count.innerText = `${translatedText.length} / 500`;
+
+    if (Array.isArray(children)) {
+      const source = [targetColumnNum, targetCardIndex];
+      const targets = children.slice();
+      translateEachChild(source, targets, translatedText);
     }
   }
 }
@@ -185,10 +203,4 @@ function getTranslatedText(
       },
     });
   });
-}
-function insertTranslatedTextToBox(translatedText, target) {
-  const [targetColumnNum, targetCardIndex] = target;
-  document.querySelector(
-    `#textarea-${targetColumnNum}-${targetCardIndex}`
-  ).value = translatedText;
 }

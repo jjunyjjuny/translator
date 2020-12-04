@@ -85,6 +85,7 @@ function createCard(columnIndex, parent, isFirstClomun = false) {
   cardList.appendChild(card);
   removeLines();
   drawLine();
+  restAPI(columnIndex, rowIndex, parentOfCard, childOfCard);
 }
 
 function createListBySurpportLanguageOfTranslator(
@@ -279,8 +280,24 @@ function createTextarea(columnIndex, rowIndex) {
 
   const textarea = document.createElement("textarea");
   textarea.setAttribute("id", `textarea-${columnIndex}-${rowIndex}`);
-  textarea.addEventListener("change", () => {
-    restAPI(columnIndex, rowIndex, parentOfCard, childOfCard);
+  textarea.addEventListener(
+    "input",
+    debounce(
+      () => {
+        restAPI(columnIndex, rowIndex, parentOfCard, childOfCard);
+      },
+      500,
+      true
+    )
+  );
+  textarea.addEventListener("input", (e) => {
+    const target = e.target;
+    const currentLength = target.value.length;
+
+    const count = document.getElementById(
+      `textcount-${columnIndex}-${rowIndex}`
+    );
+    count.innerText = `${currentLength} / 500`;
   });
   textarea.classList.add("card-textarea");
   textareaDIV.appendChild(textarea);
@@ -289,6 +306,14 @@ function createTextarea(columnIndex, rowIndex) {
   btn_removeText.setAttribute("src", "./src/btn_x.png");
   btn_removeText.setAttribute("width", 24);
   btn_removeText.setAttribute("height", 24);
+
+  btn_removeText.addEventListener("click", () => {
+    textarea.value = "";
+    document.getElementById(`textcount-${columnIndex}-${rowIndex}`).innerText =
+      "0 / 500";
+    restAPI(columnIndex, rowIndex, parentOfCard, childOfCard);
+  });
+
   textareaDIV.appendChild(btn_removeText);
   return textareaDIV;
 }
@@ -298,8 +323,8 @@ function createFooter(columnIndex, rowIndex) {
   footerDIV.classList.add("card-footer", "flex");
 
   const textCount = document.createElement("div");
-  textCount.classList.add("card-textCount");
-  textCount.innerText = "0 / 5000";
+  textCount.setAttribute("id", `textcount-${columnIndex}-${rowIndex}`);
+  textCount.innerText = "0 / 500";
 
   const btn_createChildCard = document.createElement("div");
   const img_btnOfCreateChildCard = document.createElement("img");
@@ -532,6 +557,18 @@ function eraseChildIndexOnChildOfCard(childOfCard, p_col, p_row, c_col, c_row) {
     children.splice(index, 1);
   }
 }
+const debounce = (fn, delay) => {
+  let timeout;
+  return (...args) => {
+    if (timeout) {
+      clearTimeout(timeout);
+    }
+    timeout = setTimeout(() => {
+      fn();
+    }, delay);
+  };
+};
+
 document.addEventListener("DOMContentLoaded", setDefault());
 
 window.parent = [1, 1];
