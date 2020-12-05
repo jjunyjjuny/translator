@@ -426,6 +426,8 @@ function dragDrop() {
     removeLines();
     drawLine();
   }
+  const [childCol, childRow] = childOfConnect;
+  restAPI(childCol, childRow, parentOfCard, childOfCard);
   parentOfConnect = [];
   childOfConnect = [];
 }
