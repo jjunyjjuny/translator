@@ -84,7 +84,6 @@ function createCard(columnIndex, parent, isFirstClomun = false) {
   }
 
   const cardList = document.getElementById(`cardList-${columnIndex}`);
-
   cardList.appendChild(card);
   removeLines();
   drawLine();
@@ -388,9 +387,10 @@ function dragDrop() {
   childOfConnect.push(Number(this.dataset.drag[2]));
   console.log("child :", childOfConnect);
   const hasParent = confirmParent(childOfConnect);
-  if (!hasParent && parentOfConnect[0] !== childOfConnect[0]) {
+  if (!hasParent && parentOfConnect[0] + 1 === childOfConnect[0]) {
     setParent(parentOfCard, parentOfConnect, childOfConnect);
     setChild(childOfCard, parentOfConnect, childOfConnect);
+    removeLines();
     drawLine();
   }
   parentOfConnect = [];
@@ -507,7 +507,6 @@ function drawLine() {
     });
   }
 }
-function drawCircle() {}
 
 function removeLines() {
   for (let i = 0; i < draws.length; i++) {
