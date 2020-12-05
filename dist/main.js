@@ -21,6 +21,8 @@ const parentOfCard = [[]];
 const childOfCard = [];
 const draws = [];
 const board = document.getElementById("board");
+let parentOfConnect = [];
+let childOfConnect = [];
 
 function createColumn(isFirstClomun = false) {
   const column = document.createElement("article");
@@ -82,6 +84,7 @@ function createCard(columnIndex, parent, isFirstClomun = false) {
   }
 
   const cardList = document.getElementById(`cardList-${columnIndex}`);
+
   cardList.appendChild(card);
   removeLines();
   drawLine();
@@ -339,12 +342,60 @@ function createFooter(columnIndex, rowIndex) {
     }
     createCard(columnIndex + 1, [columnIndex, rowIndex]);
   });
+  const dragTest = document.createElement("div");
+  dragTest.classList.add("dragtest");
+  dragTest.setAttribute("draggable", "true");
+  dragTest.setAttribute("data-drag", `${columnIndex}-${rowIndex}`);
 
+  dragTest.addEventListener("dragstart", dragStart);
+  dragTest.addEventListener("dragend", dragEnd);
+  dragTest.addEventListener("dragenter", dragEnter);
+  dragTest.addEventListener("dragleave", dragLeave);
+  dragTest.addEventListener("dragover", dragOver);
+  dragTest.addEventListener("drop", dragDrop);
+
+  footerDIV.appendChild(dragTest);
   footerDIV.appendChild(textCount);
   footerDIV.appendChild(btn_createChildCard);
   return footerDIV;
 }
+function dragStart() {
+  console.log("start", this.dataset.drag);
+  parentOfConnect.push(Number(this.dataset.drag[0]));
+  parentOfConnect.push(Number(this.dataset.drag[2]));
+}
+function dragEnd() {
+  console.log("end", this.dataset.drag);
+}
+function dragOver(e) {
+  e.preventDefault();
+}
+function dragEnter(e) {
+  e.preventDefault();
+  this.classList.add("over");
+  console.log("enter", this.dataset.drag);
+}
+function dragLeave(e) {
+  e.preventDefault();
+  this.classList.remove("over");
+  console.log("leave", this.dataset.drag);
+}
+function dragDrop() {
+  this.classList.remove("over");
+  console.log("drop", this.dataset.drag);
 
+  childOfConnect.push(Number(this.dataset.drag[0]));
+  childOfConnect.push(Number(this.dataset.drag[2]));
+  console.log("child :", childOfConnect);
+  const hasParent = confirmParent(childOfConnect);
+  if (!hasParent && parentOfConnect[0] !== childOfConnect[0]) {
+    setParent(parentOfCard, parentOfConnect, childOfConnect);
+    setChild(childOfCard, parentOfConnect, childOfConnect);
+    drawLine();
+  }
+  parentOfConnect = [];
+  childOfConnect = [];
+}
 function createButtonOfCreateCard(columnIndex, isFirstClomun) {
   const button = document.createElement("button");
   button.classList.add("btn_createCard", "flex");
@@ -371,6 +422,15 @@ function setParent(parentOfCard, parent, child) {
   parentOfCard[childCol].splice(childRow, 1, parent);
 }
 
+function confirmParent(child) {
+  const [childCol, childRow] = child;
+  if (parentOfCard[childCol][childRow][0] === "none") {
+    return false;
+  } else {
+    return true;
+  }
+}
+
 function setChild(childOfCard, parent, child) {
   const [parentCol, parentRow] = parent;
   if (childOfCard.length <= parentCol) {
@@ -395,7 +455,7 @@ function drawLine() {
     const drawbox = draws[i];
 
     const familys = createFamilys(i);
-    const x_middle = 62;
+    const x_middle = 64;
 
     const left_cardListHeihgt = document.getElementById(`cardList-${i}`)
       .offsetHeight;
@@ -406,7 +466,6 @@ function drawLine() {
         ? left_cardListHeihgt
         : right_cardListHeihgt;
     drawbox.size(128, drawboxHeight);
-
     familys.forEach((family) => {
       const parent = document.getElementById(
         `contents-${family[0]}-${family[1]}`
@@ -429,7 +488,6 @@ function drawLine() {
           x_middle * 2 - 14
         } ${y_child}`
       );
-
       path.fill("none");
       path.marker("start", 10, 10, (add) => {
         add.circle(10).fill("#444");
@@ -449,6 +507,7 @@ function drawLine() {
     });
   }
 }
+function drawCircle() {}
 
 function removeLines() {
   for (let i = 0; i < draws.length; i++) {

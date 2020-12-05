@@ -5,6 +5,7 @@ html,
 body {
   background: #f1f1f1;
 }
+
 .flex {
   display: flex;
 }
@@ -174,4 +175,14 @@ header > p {
   margin-top: 40px;
 
   color: #414141;
+}
+
+.dragtest {
+  width: 30px;
+  height: 30px;
+  background-color: black;
+}
+
+.over {
+  opacity: 0.3;
 }
