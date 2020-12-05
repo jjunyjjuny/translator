@@ -1,6 +1,6 @@
 "use strict";
 import { restAPI } from "./restApi.js";
-
+import { resizeTextarea } from "./globalFunc.js";
 const DEFAULT_LANGUAGE = [
   "한국어",
   "영어",
@@ -292,14 +292,34 @@ function createTextarea(columnIndex, rowIndex) {
       true
     )
   );
+
+  textarea.addEventListener("blur", (e) => {
+    const target = e.target;
+
+    resizeTextarea(target);
+    removeLines();
+    drawLine();
+  });
+
   textarea.addEventListener("input", (e) => {
     const target = e.target;
-    const currentLength = target.value.length;
 
+    const currentLength = target.value.length;
     const count = document.getElementById(
       `textcount-${columnIndex}-${rowIndex}`
     );
     count.innerText = `${currentLength} / 500`;
+    target.style.height = "1px";
+    target.style.height = `${target.scrollHeight}px`;
+    removeLines();
+    drawLine();
+  });
+  textarea.addEventListener("focus", (e) => {
+    const target = e.target;
+    target.style.height = "1px";
+    target.style.height = `${target.scrollHeight}px`;
+    removeLines();
+    drawLine();
   });
   textarea.classList.add("card-textarea");
   textareaDIV.appendChild(textarea);
@@ -463,7 +483,7 @@ function createDrawbox() {
   draws.push(draw);
 }
 
-function drawLine() {
+export function drawLine() {
   for (let i = 0; i < draws.length; i++) {
     const drawbox = draws[i];
 
@@ -521,7 +541,7 @@ function drawLine() {
   }
 }
 
-function removeLines() {
+export function removeLines() {
   for (let i = 0; i < draws.length; i++) {
     const drawbox = draws[i];
     drawbox.clear();

@@ -4,7 +4,8 @@ import {
   PAPAGO_SUPPORT_LANGUAGE,
   KAKAO_SUPPORT_LANGUAGE,
 } from "./language_code.js";
-
+import { resizeTextarea } from "./globalFunc.js";
+import { drawLine, removeLines } from "./main.js";
 export async function restAPI(
   currentColumnNum,
   currentCardIndex,
@@ -89,11 +90,16 @@ export async function restAPI(
       return children;
     }
   }
+
   function insertTranslatedTextToBox(translatedText, target) {
     const [targetColumnNum, targetCardIndex] = target;
-    document.querySelector(
+    const textarea = document.querySelector(
       `#textarea-${targetColumnNum}-${targetCardIndex}`
-    ).value = translatedText;
+    );
+    textarea.value = translatedText;
+    resizeTextarea(textarea);
+    removeLines();
+    drawLine();
     const children = getChildren(childOfCard, targetColumnNum, targetCardIndex);
 
     const count = document.getElementById(
