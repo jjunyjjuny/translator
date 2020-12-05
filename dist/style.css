@@ -182,7 +182,12 @@ header > p {
   height: 30px;
   background-color: black;
 }
-
+.copy {
+  width: 30px;
+  height: 30px;
+  background-color: tan;
+  border-radius: 50%;
+}
 .over {
   opacity: 0.3;
 }

@@ -353,6 +353,19 @@ function createFooter(columnIndex, rowIndex) {
   dragTest.addEventListener("dragover", dragOver);
   dragTest.addEventListener("drop", dragDrop);
 
+  const copy = document.createElement("div");
+  copy.classList.add("copy");
+  copy.addEventListener("click", () => {
+    const origin = document.getElementById(
+      `textarea-${columnIndex}-${rowIndex}`
+    );
+    console.log("aaaa");
+    origin.select();
+    document.execCommand("copy");
+    origin.blur();
+  });
+
+  footerDIV.appendChild(copy);
   footerDIV.appendChild(dragTest);
   footerDIV.appendChild(textCount);
   footerDIV.appendChild(btn_createChildCard);
@@ -615,6 +628,7 @@ function eraseChildIndexOnChildOfCard(childOfCard, p_col, p_row, c_col, c_row) {
     children.splice(index, 1);
   }
 }
+
 const debounce = (fn, delay) => {
   let timeout;
   return (...args) => {
