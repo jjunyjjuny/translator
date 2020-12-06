@@ -5,6 +5,13 @@ html,
 body {
   background: #f1f1f1;
 }
+body {
+  -ms-overflow-style: none;
+  scrollbar-width: none; 
+}
+body::-webkit-scrollbar {
+  display: none;
+}
 
 .flex {
   display: flex;
@@ -65,7 +72,7 @@ header > p {
   margin-top: 32px;
 }
 .card {
-  width: 540px;
+  width: 500px;
 }
 
 .card > .card-menu {
@@ -77,10 +84,11 @@ header > p {
   margin-left: 16px;
 }
 .card > .card-contents {
+  /* max-height: 1000px; */
   background: white;
   border-radius: 5px;
   box-shadow: 0px 0px 7px #949494;
-  transition: display 2s;
+  /* transition: max-height 0.5s; */
 }
 .card-contents > .card-nav {
   border-bottom: 1px solid #c4c4c4;
@@ -192,13 +200,10 @@ header > p {
   background-color: tan;
   border-radius: 50%;
 }
-.over {
-  opacity: 0.3;
-}
 .show {
-  display: block !important;
+  display: block;
 }
 .minimize {
-  height: 62px !important;
+  max-height: 62px !important;
   overflow: hidden;
 }

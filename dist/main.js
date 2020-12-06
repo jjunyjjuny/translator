@@ -60,7 +60,10 @@ function createCard(columnIndex, parent, isFirstClomun = false) {
   const cardContents = document.createElement("div");
   cardContents.classList.add("card-contents");
   cardContents.setAttribute("id", `contents-${columnIndex}-${rowIndex}`);
-
+  cardContents.addEventListener("transitionend", () => {
+    removeLines();
+    drawLine();
+  });
   const navDiv = createNavbar(columnIndex, rowIndex, isFirstClomun);
   cardContents.appendChild(navDiv);
 
@@ -180,6 +183,8 @@ function createMenuBar(columnIndex, rowIndex) {
       `contents-${columnIndex}-${rowIndex}`
     );
     contents.classList.toggle("minimize");
+    console.log(contents.style.height);
+    console.log(contents.offsetHeight);
     removeLines();
     drawLine();
   });
@@ -306,6 +311,7 @@ function createTextarea(columnIndex, rowIndex) {
       `textcount-${columnIndex}-${rowIndex}`
     );
     count.innerText = `${currentLength} / 1000`;
+
     if (currentLength === 1000) {
       count.style.color = "red";
     } else {
@@ -317,10 +323,12 @@ function createTextarea(columnIndex, rowIndex) {
   textarea.addEventListener("focus", (e) => {
     const target = e.target;
     target.style.height = `${target.scrollHeight}px`;
+    console.log("focus :", target.style.height);
   });
   textarea.addEventListener("blur", (e) => {
     const target = e.target;
     resizeTextarea(target);
+    console.log("blur :", target.style.height);
   });
   textarea.addEventListener("transitionend", () => {
     removeLines();
