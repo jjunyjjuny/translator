@@ -282,6 +282,7 @@ function createTextarea(columnIndex, rowIndex) {
 
   const textarea = document.createElement("textarea");
   textarea.setAttribute("id", `textarea-${columnIndex}-${rowIndex}`);
+  textarea.setAttribute("maxlength", 1000);
   textarea.addEventListener(
     "input",
     debounce(
@@ -293,31 +294,34 @@ function createTextarea(columnIndex, rowIndex) {
     )
   );
 
-  textarea.addEventListener("blur", (e) => {
-    const target = e.target;
-
-    resizeTextarea(target);
-    removeLines();
-    drawLine();
-  });
-
   textarea.addEventListener("input", (e) => {
     const target = e.target;
-
+    console.log("input!");
     const currentLength = target.value.length;
     const count = document.getElementById(
       `textcount-${columnIndex}-${rowIndex}`
     );
-    count.innerText = `${currentLength} / 500`;
-    target.style.height = "1px";
+    count.innerText = `${currentLength} / 1000`;
+    if (currentLength === 1000) {
+      count.style.color = "red";
+    } else {
+      count.style.color = "black";
+    }
+    target.style.height = "auto";
     target.style.height = `${target.scrollHeight}px`;
-    removeLines();
-    drawLine();
   });
   textarea.addEventListener("focus", (e) => {
+    console.log("focus");
     const target = e.target;
-    target.style.height = "1px";
     target.style.height = `${target.scrollHeight}px`;
+  });
+  textarea.addEventListener("blur", (e) => {
+    console.log("blur");
+    const target = e.target;
+    resizeTextarea(target);
+  });
+  textarea.addEventListener("transitionend", () => {
+    console.log("end");
     removeLines();
     drawLine();
   });
@@ -332,8 +336,9 @@ function createTextarea(columnIndex, rowIndex) {
   btn_removeText.addEventListener("click", () => {
     textarea.value = "";
     document.getElementById(`textcount-${columnIndex}-${rowIndex}`).innerText =
-      "0 / 500";
+      "0 / 1000";
     restAPI(columnIndex, rowIndex, parentOfCard, childOfCard);
+    resizeTextarea(textarea);
   });
 
   textareaDIV.appendChild(btn_removeText);
@@ -346,7 +351,7 @@ function createFooter(columnIndex, rowIndex) {
 
   const textCount = document.createElement("div");
   textCount.setAttribute("id", `textcount-${columnIndex}-${rowIndex}`);
-  textCount.innerText = "0 / 500";
+  textCount.innerText = "0 / 1000";
 
   const btn_createChildCard = document.createElement("div");
   const img_btnOfCreateChildCard = document.createElement("img");

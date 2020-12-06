@@ -1,10 +1,13 @@
 export function resizeTextarea(target) {
   console.log("work");
-  target.style.height = "1px";
+
   if (target.scrollHeight >= 400) {
-    target.style.cssText = `height: 400px; overflow: auto;`;
-    target.scrollTop = 400;
+    console.log("test area");
+    target.style.cssText = `height: 400px; overflow: auto`;
+    target.scrollTop = target.scrollHeight;
   } else {
+    console.log("test 2");
+    target.style.height = "auto";
     target.style.height = `${target.scrollHeight}px`;
   }
 }

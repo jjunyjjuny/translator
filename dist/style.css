@@ -153,6 +153,7 @@ header > p {
   resize: none;
   border: none;
   overflow: hidden;
+  transition: height 1s;
 }
 .card-textarea:focus {
   outline: none;

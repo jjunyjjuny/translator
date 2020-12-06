@@ -105,8 +105,13 @@ export async function restAPI(
     const count = document.getElementById(
       `textcount-${targetColumnNum}-${targetCardIndex}`
     );
-    count.innerText = `${translatedText.length} / 500`;
+    count.innerText = `${translatedText.length} / 1000`;
 
+    if (translatedText.length >= 1000) {
+      count.style.color = "red";
+    } else {
+      count.style.color = "black";
+    }
     if (Array.isArray(children)) {
       const source = [targetColumnNum, targetCardIndex];
       const targets = children.slice();
