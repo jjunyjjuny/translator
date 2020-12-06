@@ -50,7 +50,6 @@ function createColumn(isFirstClomun = false) {
 
 function createCard(columnIndex, parent, isFirstClomun = false) {
   const rowIndex = colAndRowIndex[columnIndex]++;
-
   const card = document.createElement("article");
   card.setAttribute("id", `card-${columnIndex}-${rowIndex}`);
   card.classList.add("card");
@@ -87,7 +86,6 @@ function createCard(columnIndex, parent, isFirstClomun = false) {
   cardList.appendChild(card);
   removeLines();
   drawLine();
-  restAPI(columnIndex, rowIndex, parentOfCard, childOfCard);
 }
 
 function createListBySurpportLanguageOfTranslator(
@@ -303,7 +301,6 @@ function createTextarea(columnIndex, rowIndex) {
 
   textarea.addEventListener("input", (e) => {
     const target = e.target;
-    console.log("input!");
     const currentLength = target.value.length;
     const count = document.getElementById(
       `textcount-${columnIndex}-${rowIndex}`
@@ -318,17 +315,14 @@ function createTextarea(columnIndex, rowIndex) {
     target.style.height = `${target.scrollHeight}px`;
   });
   textarea.addEventListener("focus", (e) => {
-    console.log("focus");
     const target = e.target;
     target.style.height = `${target.scrollHeight}px`;
   });
   textarea.addEventListener("blur", (e) => {
-    console.log("blur");
     const target = e.target;
     resizeTextarea(target);
   });
   textarea.addEventListener("transitionend", () => {
-    console.log("end");
     removeLines();
     drawLine();
   });
@@ -372,6 +366,17 @@ function createFooter(columnIndex, rowIndex) {
       createColumn();
     }
     createCard(columnIndex + 1, [columnIndex, rowIndex]);
+    const textareaLengtn = document.getElementById(
+      `textarea-${columnIndex}-${rowIndex}`
+    ).value;
+    if (textareaLengtn !== "") {
+      restAPI(
+        columnIndex + 1,
+        colAndRowIndex[columnIndex + 1] - 1,
+        parentOfCard,
+        childOfCard
+      );
+    }
   });
   const dragTest = document.createElement("div");
   dragTest.classList.add("dragtest");
@@ -379,7 +384,6 @@ function createFooter(columnIndex, rowIndex) {
   dragTest.setAttribute("data-drag", `${columnIndex}-${rowIndex}`);
 
   dragTest.addEventListener("dragstart", dragStart);
-  dragTest.addEventListener("dragend", dragEnd);
   dragTest.addEventListener("dragenter", dragEnter);
   dragTest.addEventListener("dragleave", dragLeave);
   dragTest.addEventListener("dragover", dragOver);
@@ -391,7 +395,6 @@ function createFooter(columnIndex, rowIndex) {
     const origin = document.getElementById(
       `textarea-${columnIndex}-${rowIndex}`
     );
-    console.log("aaaa");
     origin.select();
     document.execCommand("copy");
     origin.blur();
@@ -404,13 +407,10 @@ function createFooter(columnIndex, rowIndex) {
   return footerDIV;
 }
 function dragStart() {
-  console.log("start", this.dataset.drag);
   parentOfConnect.push(Number(this.dataset.drag[0]));
   parentOfConnect.push(Number(this.dataset.drag[2]));
 }
-function dragEnd() {
-  console.log("end", this.dataset.drag);
-}
+
 function dragOver(e) {
   e.preventDefault();
 }

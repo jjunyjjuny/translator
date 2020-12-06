@@ -181,6 +181,7 @@ function getTranslatedText(
   targetLanguage
 ) {
   return new Promise((resolve, reject) => {
+    console.log("ajax 요청");
     $.ajax({
       url: "/translate",
       dataType: "json",
