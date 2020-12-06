@@ -177,7 +177,14 @@ function createMenuBar(columnIndex, rowIndex) {
   btn_minimize.setAttribute("src", "./src/btn_minimize.png");
   btn_minimize.setAttribute("width", 32);
   btn_minimize.setAttribute("height", 32);
-  btn_minimize.classList.add("minimize");
+  btn_minimize.addEventListener("click", () => {
+    const contents = document.getElementById(
+      `contents-${columnIndex}-${rowIndex}`
+    );
+    contents.classList.toggle("minimize");
+    removeLines();
+    drawLine();
+  });
   menuDIV.appendChild(btn_minimize);
 
   if (
